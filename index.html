@@ -44,6 +44,7 @@
             margin: 20px 0;
             overflow-x: auto;
             border: 1px solid #ddd;
+            position: relative; /* Keep the table in normal document flow */
         }
 
         th, td {
@@ -106,10 +107,23 @@
             height: 50px; /* Reduced size by half */
             width: 50px;  /* Reduced size by half */
             border-radius: 50%;
-            position: relative;
+            position: absolute; /* Positioning tyre absolutely */
+            top: -2%;  /* Start the tyre at the top of the page */
+            left: 20%;  /* Position it relative to the page */
             animation: rotateTyre 0.8s infinite linear, moveTyre 4s infinite linear;
             margin: 20px; /* Margin around the tyre */
-            float: left; /* Float to the left so it doesn't affect other elements */
+            z-index: 1; /* Keep the tyre above other content */
+        }
+
+        /* Additional Tire Movement (if needed) */
+        .move-to-bottom {
+            top: 80%; /* Move it to the bottom of the page */
+            left: 10%;
+        }
+
+        .move-to-top {
+            top: 10%; /* Move it to the top of the page */
+            left: 60%;
         }
 
         .tyre:before {
@@ -160,10 +174,12 @@
     </style>
 </head>
 <body>
-    <h2>Google Sheets Data</h2>
+    <h2>PAVITHRA TYRESS TRUCK ALIGNMENT</h2>
     <input type="text" id="search-input" placeholder="Tyre Pattern Name" oninput="filterTable()">
     
     <div class="tyre"></div> <!-- Div for tyre animation -->
+    <div class="move-to-bottom"></div> <!-- Option to move tyre to bottom of page -->
+    <div class="move-to-top"></div> <!-- Option to move tyre to the top of page -->
     
     <table id="sheet-data-table">
         <thead>
