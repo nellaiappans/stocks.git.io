@@ -194,7 +194,7 @@
     </style>
 </head>
 <body>
- <h2>PAVITHRA TYRESS<br/> <span>TRUCK ALIGNMENT</span></h2>
+    <h2>PAVITHRA TYRESS<br/> <span>TRUCK ALIGNMENT</span></h2>
     <input type="text" id="search-input" placeholder="Tyre Pattern Name" oninput="filterTable()">
 
     <div class="tyre"></div> <!-- Div for tyre animation -->
@@ -226,6 +226,9 @@
         function fetchData() {
             // Show sync icon when data fetching starts
             document.getElementById('sync-icon').style.display = 'block';
+
+            // Store the current search term before fetching data
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
 
             fetch(sheetUrl)
                 .then(response => response.text())
@@ -263,13 +266,11 @@
                             tr.appendChild(td);
                         });
 
-                        // Compare the current row with the last fetched data
-                        if (lastFetchedData[index] && row.join(',') !== lastFetchedData[index].join(',')) {
-                            tr.classList.add('updated-row'); // Add class to highlight updated row
-                        }
-
                         tbody.appendChild(tr);
                     });
+
+                    // Reapply search filter after table refresh
+                    filterTable(searchTerm);
 
                     // Hide the sync icon after fetching
                     document.getElementById('sync-icon').style.display = 'none';
@@ -284,9 +285,8 @@
                 });
         }
 
-        // Function to filter rows based on search input in Column 2
-        function filterTable() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        // Modified filterTable function to accept a search term
+        function filterTable(searchTerm) {
             const rows = document.querySelectorAll('#sheet-data-table tbody tr');
 
             rows.forEach(row => {
