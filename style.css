@@ -1,0 +1,68 @@
+$tyre-size: 100;
+$tyre-thickness: 15;
+$tyre-outer-bg: #3f3f40;
+$tyre-bg: #bdc2bd;
+
+$rim-height: 30;
+$rim-width: 10;
+$rim-sep: 20;
+$rim-color: #3f3f40;
+
+//Demo
+.tyre {
+  background: $tyre-bg;
+  border: $tyre-thickness + px solid #333;
+  height: $tyre-size + px;
+  width: $tyre-size + px;
+  border-radius: 50%;
+  position: relative;
+  animation: rotateTyre .8s infinite linear, moveTyre 4s infinite linear;
+  
+  &:before {
+    content: "";
+    background: $rim-color;
+    position: absolute;
+    height: $rim-height + px;
+    width: $rim-width + px;
+    left: 50%;
+    top: calc(50% - 25px);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 ($rim-height + $rim-sep) + px 0 $rim-color;
+    border-radius: 50%
+  }
+  
+  &:after {
+    content: "";
+    background: $rim-color;
+    position: absolute;
+    height: 30px;
+    width: 10px;
+    left: calc(50% + 25px);
+    top: 50%;
+    transform: rotate(90deg) translate(-50%, -50%);
+    transform-origin: left top;
+    box-shadow: 0 ($rim-height + $rim-sep) + px 0 $rim-color;
+    border-radius: 50%;
+  }
+}
+
+//Keyframes
+@keyframes rotateTyre {
+  from {
+    transform: rotate(0deg);
+  }
+  
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes moveTyre {
+  from {
+    left: 0;
+  }
+  
+  to {
+    left: 100%;
+  }
+}
