@@ -5,22 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Sheets Data in Table</title>
     <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            margin: 0;
+        }
+
+        /* Table Styles */
         table {
             width: 100%;
             border-collapse: collapse;
+            margin: 20px 0;
+            overflow-x: auto;
+            border: 1px solid #ddd;
         }
-        table, th, td {
-            border: 1px solid black;
-        }
+
         th, td {
-            padding: 8px;
+            padding: 12px 15px;
             text-align: left;
+            border: 1px solid #ddd;
         }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
         .updated-row {
-            background-color: #fffae6; /* Light yellow background for updated rows */
+            background-color: #fffae6; /* Light yellow for updated rows */
         }
-        .new-row {
-            background-color: #d1ffd1; /* Light green background for new rows */
+
+        /* Mobile Styles */
+        @media screen and (max-width: 600px) {
+            th, td {
+                padding: 8px 10px;
+            }
+
+            table {
+                font-size: 12px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
         }
     </style>
 </head>
@@ -41,9 +76,9 @@
     </table>
 
     <script>
-        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQJyL8GhETIHgnm-rjYpqLenVAxKTOb4VtcDeW3C8FgyLCbLDKV7WfL2uuk30i4BMK9FuZU5mW3NdyE/pub?output=csv';
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?output=csv';
+
         let lastFetchedData = [];
-        let lastFetchTimestamp = Date.now();
 
         // Function to fetch and display the data
         function fetchData() {
@@ -70,29 +105,16 @@
                             tr.appendChild(td);
                         });
 
-                        // Check if the row has changed compared to the last data
-                        let isNewRow = false;
-                        if (lastFetchedData[index]) {
-                            // Compare each row to detect changes (based on a timestamp mechanism)
-                            const oldRow = lastFetchedData[index].join(',');
-                            const newRow = row.join(',');
-                            if (oldRow !== newRow) {
-                                tr.classList.add('updated-row');  // Add class to highlight updated row
-                            }
-                        } else {
-                            isNewRow = true;
-                        }
-
-                        if (isNewRow) {
-                            tr.classList.add('new-row'); // Add class to highlight new rows
+                        // Compare the current row with the last fetched data
+                        if (lastFetchedData[index] && row.join(',') !== lastFetchedData[index].join(',')) {
+                            tr.classList.add('updated-row'); // Add class to highlight updated row
                         }
 
                         tbody.appendChild(tr);
                     });
 
-                    // Update the last fetched data and timestamp
+                    // Update the last fetched data
                     lastFetchedData = rows;
-                    lastFetchTimestamp = Date.now();
                 })
                 .catch(error => console.error('Error fetching Google Sheet data:', error));
         }
@@ -100,8 +122,8 @@
         // Fetch data immediately when the page loads
         fetchData();
 
-        // Set an interval to fetch data every 30 seconds (30000 milliseconds)
-        setInterval(fetchData, 30000);
+        // Set an interval to fetch data every 10 seconds (10000 milliseconds)
+        setInterval(fetchData, 10000);
     </script>
 </body>
 </html>
