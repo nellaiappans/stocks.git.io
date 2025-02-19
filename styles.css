@@ -1,96 +1,117 @@
-  /* General Styles */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff; /* Changed background color to white */
+}
 
-        h2 {
-            text-align: center;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
-            margin: 0;
-        }
+/* Heading Styles */
+h2 {
+    text-align: center;
+    padding: 20px;
+    background-color: #d3d3d3; /* Ash color background */
+    color: #333; /* Dark text for contrast */
+    margin: 0;
+    animation: slideIn 1s ease-out; /* Animation for heading */
+}
 
-        /* Search Input */
-        #search-input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            margin: 10px 0;
-            box-sizing: border-box;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
+/* Heading Animation */
+@keyframes slideIn {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
 
-        #search-input::placeholder {
-            color: #aaa;
-        }
+/* Search Input */
+#search-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
 
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            overflow-x: auto;
-            border: 1px solid #ddd;
-        }
+#search-input::placeholder {
+    color: #aaa;
+}
 
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    overflow-x: auto;
+    border: 1px solid #ddd;
+}
 
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
 
-        td:first-child {
-            width: 15%; /* Reduced width for S/No */
-        }
+th {
+    background-color: #4CAF50;
+    color: white;
+}
 
-        td:nth-child(3) {
-            font-weight: bold; /* Bold the text in the Stocks/Units column */
-        }
+td:first-child {
+    width: 15%; /* Reduced width for S/No */
+}
 
-        /* Color Changes for Stocks/Units */
-        td:nth-child(3) {
-            font-weight: bold;
-        }
+td:nth-child(3) {
+    font-weight: bold; /* Bold the text in the Stocks/Units column */
+}
 
-        .stocks-red {
-            color: red; /* Red for stock < 2 */
-        }
+/* Color Changes for Stocks/Units */
+td:nth-child(3) {
+    font-weight: bold;
+}
 
-        .stocks-green {
-            color: green; /* Green for stock >= 6 */
-        }
+.stocks-red {
+    color: red; /* Red for stock < 2 */
+}
 
-        .stocks-normal {
-            color: black; /* Normal color for stocks between 2 and 6 */
-        }
+.stocks-green {
+    color: green; /* Green for stock >= 6 */
+}
 
-        .updated-row {
-            background-color: #fffae6; /* Light yellow for updated rows */
-        }
+.stocks-normal {
+    color: black; /* Normal color for stocks between 2 and 6 */
+}
 
-        /* Mobile Styles */
-        @media screen and (max-width: 600px) {
-            th, td {
-                padding: 8px 10px;
-            }
+.updated-row {
+    background-color: #fffae6; /* Light yellow for updated rows */
+}
 
-            table {
-                font-size: 12px;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-        }
+/* Mobile Styles */
+@media screen and (max-width: 600px) {
+    th, td {
+        padding: 9px 10px;
+    }
 
+    table {
+        font-size: 12px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
 
-
-
+/* Add Tyre Icon */
+.tyre-icon {
+    width: 30px;
+    height: 30px;
+    background-image: url('tyre-icon.png'); /* Link to your tyre icon */
+    background-size: cover;
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+}
