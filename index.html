@@ -24,7 +24,7 @@
         /* Search Input */
         #search-input {
             width: 100%;
-            padding: 10px 40px 10px 20px; /* Add padding for search icon */
+            padding: 10px;
             font-size: 16px;
             margin: 10px 0;
             box-sizing: border-box;
@@ -33,15 +33,6 @@
         }
 
         #search-input::placeholder {
-            color: #aaa;
-        }
-
-        /* Search Icon */
-        #search-input-icon {
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            font-size: 16px;
             color: #aaa;
         }
 
@@ -79,11 +70,15 @@
         }
 
         .stocks-red {
-            color: red;
+            color: red; /* Red for stock < 2 */
+        }
+
+        .stocks-green {
+            color: green; /* Green for stock >= 6 */
         }
 
         .stocks-normal {
-            color: black;
+            color: black; /* Normal color for stocks between 2 and 6 */
         }
 
         .updated-row {
@@ -106,10 +101,7 @@
 </head>
 <body>
     <h2>Google Sheets Data</h2>
-    <div style="position: relative;">
-        <input type="text" id="search-input" placeholder="Tyre Pattern Name" oninput="filterTable()">
-        <span id="search-input-icon">&#128269;</span> <!-- Search Icon -->
-    </div>
+    <input type="text" id="search-input" placeholder="Tyre Pattern Name" oninput="filterTable()">
     
     <table id="sheet-data-table">
         <thead>
@@ -155,8 +147,10 @@
                             // Add color to Stocks/Units column
                             if (colIndex === 2) {
                                 const stockValue = parseFloat(cell.trim());
-                                if (stockValue < 2 || stockValue > 6) {
-                                    td.classList.add('stocks-red'); // Add red color class
+                                if (stockValue < 2) {
+                                    td.classList.add('stocks-red'); // Add red color class for stock < 2
+                                } else if (stockValue >= 6) {
+                                    td.classList.add('stocks-green'); // Add green color class for stock >= 6
                                 } else {
                                     td.classList.add('stocks-normal'); // Normal color for stocks between 2 and 6
                                 }
@@ -185,7 +179,7 @@
             const rows = document.querySelectorAll('#sheet-data-table tbody tr');
 
             rows.forEach(row => {
-                const col2 = row.cells[1].textContent.toLowerCase(); // Column 2 data
+                const col2 = row.cells[1].textContent.toLowerCase(); // Column 2 data (Tyre Pattern)
                 if (col2.includes(searchTerm)) {
                     row.style.display = ''; // Show row
                 } else {
