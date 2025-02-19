@@ -272,7 +272,10 @@
                     // Update the last fetched data
                     lastFetchedData = rows;
                 })
-                .catch(error => console.error('Error fetching Google Sheet data:', error));
+                .catch(error => {
+                    console.error('Error fetching Google Sheet data:', error);
+                    // Handle the error by retrying or showing a message
+                });
         }
 
         // Function to filter rows based on search input in Column 2
@@ -294,7 +297,7 @@
         fetchData();
 
         // Set an interval to fetch data every 10 seconds (10000 milliseconds)
-        setInterval(fetchData, 10000);
+        setInterval(fetchData, 5000); // Reduced interval to 5 seconds for faster updates
     </script>
 </body>
 </html>
