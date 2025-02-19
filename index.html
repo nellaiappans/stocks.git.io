@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+            padding-bottom: 40px; /* Adding bottom padding to prevent overlap */
         }
 
         h2 {
@@ -102,11 +103,12 @@
         .tyre {
             background: #bdc2bd;
             border: 15px solid #333;
-            height: 100px;
-            width: 100px;
+            height: 50px; /* Reduced size by half */
+            width: 50px;  /* Reduced size by half */
             border-radius: 50%;
             position: relative;
             animation: rotateTyre 0.8s infinite linear, moveTyre 4s infinite linear;
+            margin: 20px auto; /* Centering the tyre and giving it margin */
         }
 
         .tyre:before {
@@ -141,7 +143,6 @@
             from {
                 transform: rotate(0deg);
             }
-
             to {
                 transform: rotate(360deg);
             }
@@ -151,7 +152,6 @@
             from {
                 left: 0;
             }
-
             to {
                 left: 100%;
             }
