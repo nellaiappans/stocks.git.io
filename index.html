@@ -97,11 +97,72 @@
                 -webkit-overflow-scrolling: touch;
             }
         }
+
+        /* Tyre Animation Styles */
+        .tyre {
+            background: #bdc2bd;
+            border: 15px solid #333;
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            position: relative;
+            animation: rotateTyre 0.8s infinite linear, moveTyre 4s infinite linear;
+        }
+
+        .tyre:before {
+            content: "";
+            background: #3f3f40;
+            position: absolute;
+            height: 30px;
+            width: 10px;
+            left: 50%;
+            top: calc(50% - 25px);
+            transform: translate(-50%, -50%);
+            box-shadow: 0 50px 0 #3f3f40;
+            border-radius: 50%;
+        }
+
+        .tyre:after {
+            content: "";
+            background: #3f3f40;
+            position: absolute;
+            height: 30px;
+            width: 10px;
+            left: calc(50% + 25px);
+            top: 50%;
+            transform: rotate(90deg) translate(-50%, -50%);
+            transform-origin: left top;
+            box-shadow: 0 50px 0 #3f3f40;
+            border-radius: 50%;
+        }
+
+        /* Keyframes for Rotation and Movement */
+        @keyframes rotateTyre {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes moveTyre {
+            from {
+                left: 0;
+            }
+
+            to {
+                left: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <h2>Google Sheets Data</h2>
     <input type="text" id="search-input" placeholder="Tyre Pattern Name" oninput="filterTable()">
+    
+    <div class="tyre"></div> <!-- Div for tyre animation -->
     
     <table id="sheet-data-table">
         <thead>
