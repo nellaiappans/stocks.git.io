@@ -17,7 +17,10 @@
             text-align: left;
         }
         .updated-row {
-            background-color: yellow;
+            background-color: #fffae6; /* Light yellow background for updated rows */
+        }
+        .new-row {
+            background-color: #d1ffd1; /* Light green background for new rows */
         }
     </style>
 </head>
@@ -39,8 +42,8 @@
 
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQJyL8GhETIHgnm-rjYpqLenVAxKTOb4VtcDeW3C8FgyLCbLDKV7WfL2uuk30i4BMK9FuZU5mW3NdyE/pub?output=csv';
-
         let lastFetchedData = [];
+        let lastFetchTimestamp = Date.now();
 
         // Function to fetch and display the data
         function fetchData() {
@@ -68,15 +71,28 @@
                         });
 
                         // Check if the row has changed compared to the last data
-                        if (lastFetchedData[index] && row.join(',') !== lastFetchedData[index].join(',')) {
-                            tr.classList.add('updated-row');  // Add class to highlight updated row
+                        let isNewRow = false;
+                        if (lastFetchedData[index]) {
+                            // Compare each row to detect changes (based on a timestamp mechanism)
+                            const oldRow = lastFetchedData[index].join(',');
+                            const newRow = row.join(',');
+                            if (oldRow !== newRow) {
+                                tr.classList.add('updated-row');  // Add class to highlight updated row
+                            }
+                        } else {
+                            isNewRow = true;
+                        }
+
+                        if (isNewRow) {
+                            tr.classList.add('new-row'); // Add class to highlight new rows
                         }
 
                         tbody.appendChild(tr);
                     });
 
-                    // Update the last fetched data to the current data
+                    // Update the last fetched data and timestamp
                     lastFetchedData = rows;
+                    lastFetchTimestamp = Date.now();
                 })
                 .catch(error => console.error('Error fetching Google Sheet data:', error));
         }
