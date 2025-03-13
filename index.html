@@ -14,6 +14,35 @@
             padding-bottom: 40px; /* Adding bottom padding to prevent overlap */
         }
 
+        /* Navbar Styles */
+        nav {
+            background-color: #2C3930;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        nav a:hover {
+            background-color: #4CAF50;
+        }
+
+        /* General Section Styles */
+        section {
+            display: none;
+        }
+
+        section.active {
+            display: block;
+        }
+
         h2 {
             text-align: center;
             padding: 20px;
@@ -22,7 +51,6 @@
             margin: 0;
         }
 
-        /* Search Input */
         #search-input {
             width: 100%;
             padding: 10px;
@@ -33,10 +61,6 @@
             border: 1px solid #ddd;
         }
 
-        #search-input::placeholder {
-            color: #aaa;
-        }
-
         /* Table Styles */
         table {
             width: 100%;
@@ -44,7 +68,7 @@
             margin: 20px 0;
             overflow-x: auto;
             border: 1px solid #ddd;
-            position: relative; /* Keep the table in normal document flow */
+            position: relative;
         }
 
         th, td {
@@ -59,45 +83,27 @@
         }
 
         td:first-child {
-            width: 15%; /* Reduced width for S/No */
+            width: 15%;
         }
 
-        td:nth-child(3) {
-            font-weight: bold; /* Bold the text in the Stocks/Units column */
-        }
-
-        /* Color Changes for Stocks/Units */
         td:nth-child(3) {
             font-weight: bold;
         }
 
         .stocks-red {
-            color: red; /* Red for stock < 2 */
+            color: red;
         }
 
         .stocks-green {
-            color: green; /* Green for stock >= 6 */
+            color: green;
         }
 
         .stocks-normal {
-            color: black; /* Normal color for stocks between 2 and 6 */
+            color: black;
         }
 
         .updated-row {
-            background-color: #fffae6; /* Light yellow for updated rows */
-        }
-
-        /* Mobile Styles */
-        @media screen and (max-width: 600px) {
-            th, td {
-                padding: 8px 10px;
-            }
-
-            table {
-                font-size: 12px;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
+            background-color: #fffae6;
         }
 
         /* Sync Icon */
@@ -107,7 +113,7 @@
             right: 20px;
             font-size: 30px;
             color: #2C3930;
-            display: Block; /* Hidden by default */
+            display: Block;
             z-index: 2;
             animation: rotateSync 1s infinite linear;
         }
@@ -124,56 +130,17 @@
         .tyre {
             background: #bdc2bd;
             border: 15px solid #333;
-            height: 35px; /* Reduced size by half */
-            width: 35px;  /* Reduced size by half */
+            height: 35px;
+            width: 35px;
             border-radius: 50%;
-            position: absolute; /* Positioning tyre absolutely */
-            top: 1.1%;  /* Start the tyre at the top of the page */
-            left: 20%;  /* Position it relative to the page */
+            position: absolute;
+            top: 1.1%;
+            left: 20%;
             animation: rotateTyre 0.8s infinite linear, moveTyre 4s infinite linear;
-            margin: 20px; /* Margin around the tyre */
-            z-index: 1; /* Keep the tyre above other content */
+            margin: 20px;
+            z-index: 1;
         }
 
-        /* Additional Tire Movement (if needed) */
-        .move-to-bottom {
-            top: 80%; /* Move it to the bottom of the page */
-            left: 10%;
-        }
-
-        .move-to-top {
-            top: 10%; /* Move it to the top of the page */
-            left: 60%;
-        }
-
-        .tyre:before {
-            content: "";
-            background: #3f3f40;
-            position: absolute;
-            height: 25px;
-            width: 7px;
-            left: 50%;
-            top: calc(50% - 25px);
-            transform: translate(-50%, -50%);
-            box-shadow: 0 50px 0 #3f3f40;
-            border-radius: 50%;
-        }
-
-        .tyre:after {
-            content: "";
-            background: #3f3f40;
-            position: absolute;
-            height: 25px;
-            width: 7px;
-            left: calc(50% + 25px);
-            top: 50%;
-            transform: rotate(90deg) translate(-50%, -50%);
-            transform-origin: left top;
-            box-shadow: 0 50px 0 #3f3f40;
-            border-radius: 50%;
-        }
-
-        /* Keyframes for Rotation and Movement */
         @keyframes rotateTyre {
             from {
                 transform: rotate(0deg);
@@ -194,115 +161,125 @@
     </style>
 </head>
 <body>
-    <h2>PAVITHRA TYRESS<br/> <span>TRUCK ALIGNMENT</span></h2>
-    <input type="text" id="search-input" placeholder="Tyre Pattern Name" oninput="filterTable()">
+ 
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="active">
+        <h2>PAVITHRA TYRESS<br/> <span>TRUCK ALIGNMENT</span></h2>
+           <nav>
+        <a href="javascript:void(0)" onclick="showSection('dashboard')">Dashboard</a>
+        <a href="javascript:void(0)" onclick="showSection('stockIn')">Stock In</a>
+        <a href="javascript:void(0)" onclick="showSection('stockOut')">Stock Out</a>
+    </nav>
 
-    <div class="tyre"></div> <!-- Div for tyre animation -->
-    <div class="move-to-bottom"></div> <!-- Option to move tyre to bottom of page -->
-    <div class="move-to-top"></div> <!-- Option to move tyre to the top of page -->
+        <input type="text" id="search-input" placeholder="Tyre Pattern Name" oninput="filterTable()">
+        <div class="tyre"></div>
+        <div id="sync-icon">&#x21bb;</div>
 
-    <!-- Sync Icon -->
-    <div id="sync-icon">&#x21bb;</div> <!-- Sync Icon (using Unicode for refresh symbol) -->
+        <table id="sheet-data-table">
+            <thead>
+                <tr>
+                    <th>S/No</th>
+                    <th>Tyre Pattern</th>
+                    <th>Stocks/Units</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
 
-    <table id="sheet-data-table">
-        <thead>
-            <tr>
-                <th>S/No</th>
-                <th>Tyre Pattern</th>
-                <th>Stocks/Units</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Data will be populated here -->
-        </tbody>
-    </table>
+    <!-- Stock In Section -->
+    <section id="stockIn">
+        <h2>Stock In</h2>
+        <p>This section allows you to add stock to items. (For demonstration, this section doesn't interact with the table yet.)</p>
+        <button onclick="addStockIn()">Add Stock In</button>
+    </section>
+
+    <!-- Stock Out Section -->
+    <section id="stockOut">
+        <h2>Stock Out</h2>
+        <p>This section allows you to remove stock from items. (For demonstration, this section doesn't interact with the table yet.)</p>
+        <button onclick="addStockOut()">Add Stock Out</button>
+    </section>
 
     <script>
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?output=csv';
 
-        let lastFetchedData = [];
-
-        // Function to fetch and display the data
+        // Fetch and display data
         function fetchData() {
-            // Show sync icon when data fetching starts
-            document.getElementById('sync-icon').style.display = 'block';
-
-            // Store the current search term before fetching data
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
 
             fetch(sheetUrl)
                 .then(response => response.text())
                 .then(data => {
-                    // Parse CSV data into an array of rows
                     const rows = data.split('\n').map(row => row.split(','));
 
-                    // Get the table body element
                     const tbody = document.querySelector('#sheet-data-table tbody');
-
-                    // Clear existing data before inserting new data
                     tbody.innerHTML = '';
 
-                    // Loop through each row and insert it into the table
                     rows.forEach((row, index) => {
-                        if (index === 0 || row.length === 1 && row[0] === '') return; // Skip empty rows or header row
+                        if (index === 0 || row.length === 1 && row[0] === '') return;
 
                         const tr = document.createElement('tr');
                         row.forEach((cell, colIndex) => {
                             const td = document.createElement('td');
-                            td.textContent = cell.trim(); // Add cell content
-
-                            // Add color to Stocks/Units column
+                            td.textContent = cell.trim();
                             if (colIndex === 2) {
                                 const stockValue = parseFloat(cell.trim());
                                 if (stockValue < 2) {
-                                    td.classList.add('stocks-red'); // Add red color class for stock < 2
+                                    td.classList.add('stocks-red');
                                 } else if (stockValue >= 6) {
-                                    td.classList.add('stocks-green'); // Add green color class for stock >= 6
+                                    td.classList.add('stocks-green');
                                 } else {
-                                    td.classList.add('stocks-normal'); // Normal color for stocks between 2 and 6
+                                    td.classList.add('stocks-normal');
                                 }
                             }
-
                             tr.appendChild(td);
                         });
 
                         tbody.appendChild(tr);
                     });
 
-                    // Reapply search filter after table refresh
                     filterTable(searchTerm);
-
-                    // Hide the sync icon after fetching
-                    document.getElementById('sync-icon').style.display = 'none';
-
-                    // Update the last fetched data
-                    lastFetchedData = rows;
                 })
-                .catch(error => {
-                    console.error('Error fetching Google Sheet data:', error);
-                    // Hide sync icon on error
-                    document.getElementById('sync-icon').style.display = 'none';
-                });
+                .catch(error => console.error('Error fetching data:', error));
         }
 
-        // Modified filterTable function to accept a search term
+        // Show specific section and hide others
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Filter the table data based on search input
         function filterTable(searchTerm) {
             const rows = document.querySelectorAll('#sheet-data-table tbody tr');
-
             rows.forEach(row => {
-                const col2 = row.cells[1].textContent.toLowerCase(); // Column 2 data (Tyre Pattern)
+                const col2 = row.cells[1].textContent.toLowerCase();
                 if (col2.includes(searchTerm)) {
-                    row.style.display = ''; // Show row
+                    row.style.display = '';
                 } else {
-                    row.style.display = 'none'; // Hide row
+                    row.style.display = 'none';
                 }
             });
         }
 
-        // Fetch data immediately when the page loads
+        // Example function to simulate adding stock in
+        function addStockIn() {
+            alert("Stock In functionality will be implemented here.");
+        }
+
+        // Example function to simulate adding stock out
+        function addStockOut() {
+            alert("Stock Out functionality will be implemented here.");
+        }
+
+        // Initial fetch data
         fetchData();
 
-        // Set an interval to fetch data every 5 seconds
+        // Refresh data every 5 seconds
         setInterval(fetchData, 5000);
     </script>
 </body>
