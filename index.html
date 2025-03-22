@@ -114,7 +114,7 @@
             right: 20px;
             font-size: 30px;
             color: #2C3930;
-            display: Block;
+            display: block;
             z-index: 2;
             animation: rotateSync 1s infinite linear;
         }
@@ -159,23 +159,86 @@
                 left: 100%;
             }
         }
+
+        /* Stock In & Stock Out Sections */
+        .stock-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .stock-section select,
+        .stock-section input,
+        .stock-section button {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        .stock-section button {
+            background-color: #2C3930;
+            color: white;
+            cursor: pointer;
+        }
+
+        .stock-section button:hover {
+            background-color: #4CAF50;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            /* Navbar styles for mobile */
+            nav {
+                padding: 8px;
+            }
+
+            nav a {
+                padding: 8px 15px;
+                font-size: 14px;  /* Adjust font size for mobile devices */
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Further reduce font size for very small screens */
+            nav a {
+                padding: 6px 12px;
+                font-size: 12px;  /* Adjust font size for smaller screens */
+            }
+        }
+
     </style>
+
 </head>
 <body>
- 
-    <!-- Dashboard Section -->
-    <section id="dashboard" class="active">
-        <h2>PAVITHRA TYRESS<br/> <span>TRUCK ALIGNMENT</span></h2>
-           <nav>
+
+    <!-- Navigation Links (Navbar) -->
+    <nav>
         <a href="javascript:void(0)" onclick="showSection('dashboard')">Dashboard</a>
         <a href="javascript:void(0)" onclick="showSection('stockIn')">Stock In</a>
         <a href="javascript:void(0)" onclick="showSection('stockOut')">Stock Out</a>
     </nav>
 
-        <input type="text" id="search-input" placeholder="Tyre Pattern Name" oninput="filterTable()">
-        <div class="tyre"></div>
-        <div id="sync-icon">&#x21bb;</div>
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="active">
+        <h2>PAVITHRA TYRESS<br/> <span>TRUCK ALIGNMENT</span></h2>
 
+        <!-- Search Bar -->
+        <input type="text" id="search-input" placeholder="Tyre Pattern Name" oninput="filterTable()">
+
+        <!-- Sync Icon -->
+        <div id="sync-icon" onclick="fetchData()">&#x21bb;</div>
+
+        <!-- Table to Display Stock Data -->
         <table id="sheet-data-table">
             <thead>
                 <tr>
@@ -191,29 +254,62 @@
     <!-- Stock In Section -->
     <section id="stockIn">
         <h2>Stock In</h2>
-        <p>This section allows you to add stock to items. (For demonstration, this section doesn't interact with the table yet.)</p>
+        <select id="stockInTyrePattern">
+            <!-- Dropdown options will be populated dynamically -->
+        </select>
+        <input type="number" id="stockInNumber" placeholder="Number of Items to Add" />
         <button onclick="addStockIn()">Add Stock In</button>
     </section>
 
     <!-- Stock Out Section -->
     <section id="stockOut">
         <h2>Stock Out</h2>
-        <p>This section allows you to remove stock from items. (For demonstration, this section doesn't interact with the table yet.)</p>
+        <select id="stockOutTyrePattern">
+            <!-- Dropdown options will be populated dynamically -->
+        </select>
+        <input type="number" id="stockOutNumber" placeholder="Number of Items to Remove" />
         <button onclick="addStockOut()">Add Stock Out</button>
     </section>
 
     <script>
-        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?output=csv';
+        const tyrePatterns = [
+            '11.00 R20 LDR', '11.00 R20 RA1', '11.00 R20 RA', '11.00 R20 MD',
+            'T/L 295/80 R22.5 RA', 'T/L 295/80 R22.5 RD', 'T/L 235/75 R17.5 RA',
+            'T/L 235/75 R17.5 RD', 'T/L 215/75 R17.5 RD', '295/90 R20 MD',
+            '295/90 R20 MD+', '295/90 R20 ENDUTRAX MA', '295/90 R20 RA',
+            '295/90 R20 LD', '295/90 R20 RA(T)', '295/90 R20 MA', '10.00 20 AMAR GOLD',
+            '10.00 20 XT-7 GOLD', '9.00 20 LD', '900 16 TERRA', '8.25 R 20 LD',
+            '8.25 R 20 RA', '8.25 R 20 RA(T)', '8.25 20 Amar Gold', '8.25 20 XT - 7GOLD',
+            '8.25 R16 LD', '8.25 R16 RA', '8.25 16 Vihan Lug', '8.25 16 Vihan Rib',
+            '7.50 R16 LD', '7.50 R16 RA', '7.50 16 VIHAN  RIB', '7.00 16 VIHAN  RIB',
+            '7.00 R16 RA', '7.00 16 VIHAN LUG', '16.9 -28 Y-LON', '13.00-24 ARG217',
+            'Michelin 295/90 R20 Xmulti HDZ'
+        ];
 
-        // Fetch and display data
+        // Function to populate dropdowns with tyre patterns
+        function populateDropdowns() {
+            const stockInDropdown = document.getElementById('stockInTyrePattern');
+            const stockOutDropdown = document.getElementById('stockOutTyrePattern');
+
+            tyrePatterns.forEach(pattern => {
+                let optionIn = document.createElement('option');
+                optionIn.value = pattern;
+                optionIn.textContent = pattern;
+                stockInDropdown.appendChild(optionIn);
+
+                let optionOut = document.createElement('option');
+                optionOut.value = pattern;
+                optionOut.textContent = pattern;
+                stockOutDropdown.appendChild(optionOut);
+            });
+        }
+
+        // Fetch data from Google Sheets URL and populate the table
         function fetchData() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-
-            fetch(sheetUrl)
+            fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?gid=1669864749&single=true&output=csv')
                 .then(response => response.text())
                 .then(data => {
                     const rows = data.split('\n').map(row => row.split(','));
-
                     const tbody = document.querySelector('#sheet-data-table tbody');
                     tbody.innerHTML = '';
 
@@ -239,49 +335,79 @@
 
                         tbody.appendChild(tr);
                     });
-
-                    filterTable(searchTerm);
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }
 
-        // Show specific section and hide others
+        // Add stock-in (send data to Apps Script Web App)
+        function addStockIn() {
+            const tyrePattern = document.getElementById('stockInTyrePattern').value.trim();
+            const stockNumber = parseInt(document.getElementById('stockInNumber').value);
+
+            if (tyrePattern && !isNaN(stockNumber)) {
+                fetch('https://script.google.com/macros/s/AKfycbx6ZeNGO22qbRFOusjO6TmtoZMUdz8vtmZ8HD4SySHRm2qXWM9efDXrknEfwD8W9igrYA/exec', {  
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'stockIn',
+                        tyrePattern: tyrePattern,
+                        number: stockNumber
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    fetchData(); // Reload data after update
+                })
+                .catch(error => alert('Error updating stock in: ' + error));
+            } else {
+                alert('Please provide valid data.');
+            }
+        }
+
+        // Add stock-out (send data to Apps Script Web App)
+        function addStockOut() {
+            const tyrePattern = document.getElementById('stockOutTyrePattern').value.trim();
+            const stockNumber = parseInt(document.getElementById('stockOutNumber').value);
+
+            if (tyrePattern && !isNaN(stockNumber)) {
+                fetch('https://script.google.com/macros/s/AKfycbwG8r71WeTCaaPD0rE-hrq_6Xp_fgevly_FPTCO3pNnuEE_J4WsaR5vFx5qqRLuxyM1Hw/exec', {  
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'stockOut',
+                        tyrePattern: tyrePattern,
+                        number: stockNumber
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    fetchData(); // Reload data after update
+                })
+                .catch(error => alert('Error updating stock out: ' + error));
+            } else {
+                alert('Please provide valid data.');
+            }
+        }
+
+        // Function to show only the active section
         function showSection(sectionId) {
+            // Hide all sections
             const sections = document.querySelectorAll('section');
-            sections.forEach(section => {
-                section.classList.remove('active');
-            });
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Show the selected section
             document.getElementById(sectionId).classList.add('active');
         }
 
-        // Filter the table data based on search input
-        function filterTable(searchTerm) {
-            const rows = document.querySelectorAll('#sheet-data-table tbody tr');
-            rows.forEach(row => {
-                const col2 = row.cells[1].textContent.toLowerCase();
-                if (col2.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
-
-        // Example function to simulate adding stock in
-        function addStockIn() {
-            alert("Stock In functionality will be implemented here.");
-        }
-
-        // Example function to simulate adding stock out
-        function addStockOut() {
-            alert("Stock Out functionality will be implemented here.");
-        }
-
-        // Initial fetch data
+        // Initial population of dropdowns and data fetch
+        populateDropdowns();
         fetchData();
-
-        // Refresh data every 5 seconds
-        setInterval(fetchData, 5000);
     </script>
 </body>
 </html>
