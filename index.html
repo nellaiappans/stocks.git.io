@@ -264,10 +264,22 @@
     <!-- Stock Out Section -->
     <section id="stockOut">
         <h2>Stock Out</h2>
+
+        <!-- New Input Fields -->
+        <input type="date" id="stockOutDate" placeholder="Date" />
         <select id="stockOutTyrePattern">
             <!-- Dropdown options will be populated dynamically -->
         </select>
         <input type="number" id="stockOutNumber" placeholder="Number of Items to Remove" />
+        <input type="text" id="stockOutCustomerName" placeholder="Customer Name" />
+        <input type="text" id="stockOutVehicleNo" placeholder="Vehicle No" />
+        <input type="tel" id="stockOutMobile" placeholder="Mobile" />
+        <input type="text" id="stockOutTyreSerialNo" placeholder="Tyre Serial No" />
+        <input type="number" id="stockOutPrice" placeholder="Price" />
+        <input type="text" id="stockOutRemarks" placeholder="Remarks" />
+        <input type="number" id="stockOutSalesValue" placeholder="Sales Value" />
+        
+        <!-- Submit Button -->
         <button onclick="addStockOut()">Add Stock Out</button>
     </section>
 
@@ -306,7 +318,7 @@
 
         // Fetch data from Google Sheets URL and populate the table
         function fetchData() {
-            fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?gid=1669864749&single=true&output=csv')
+            fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?gid=1423507243&single=true&output=csv')
                 .then(response => response.text())
                 .then(data => {
                     const rows = data.split('\n').map(row => row.split(','));
@@ -371,6 +383,13 @@
         function addStockOut() {
             const tyrePattern = document.getElementById('stockOutTyrePattern').value.trim();
             const stockNumber = parseInt(document.getElementById('stockOutNumber').value);
+            const customerName = document.getElementById('stockOutCustomerName').value.trim();
+            const vehicleNo = document.getElementById('stockOutVehicleNo').value.trim();
+            const mobile = document.getElementById('stockOutMobile').value.trim();
+            const tyreSerialNo = document.getElementById('stockOutTyreSerialNo').value.trim();
+            const price = parseFloat(document.getElementById('stockOutPrice').value);
+            const remarks = document.getElementById('stockOutRemarks').value.trim();
+            const salesValue = parseFloat(document.getElementById('stockOutSalesValue').value);
 
             if (tyrePattern && !isNaN(stockNumber)) {
                 fetch('https://script.google.com/macros/s/AKfycbwG8r71WeTCaaPD0rE-hrq_6Xp_fgevly_FPTCO3pNnuEE_J4WsaR5vFx5qqRLuxyM1Hw/exec', {  
@@ -381,7 +400,15 @@
                     body: JSON.stringify({
                         action: 'stockOut',
                         tyrePattern: tyrePattern,
-                        number: stockNumber
+                        number: stockNumber,
+                        customerName: customerName,
+                        vehicleNo: vehicleNo,
+                        mobile: mobile,
+                        tyreSerialNo: tyreSerialNo,
+                        price: price,
+                        remarks: remarks,
+                        salesValue: salesValue,
+                        date: document.getElementById('stockOutDate').value
                     }),
                 })
                 .then(response => response.json())
@@ -395,19 +422,39 @@
             }
         }
 
-        // Function to show only the active section
+        // Show specific section when clicked
         function showSection(sectionId) {
-            // Hide all sections
-            const sections = document.querySelectorAll('section');
-            sections.forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
 
-            // Show the selected section
             document.getElementById(sectionId).classList.add('active');
         }
 
-        // Initial population of dropdowns and data fetch
+        // Filter table based on search input
+        function filterTable() {
+            const filter = document.getElementById('search-input').value.toUpperCase();
+            const rows = document.querySelector('#sheet-data-table tbody').rows;
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                const patternCell = cells[1]; // Column with the pattern name
+
+                if (patternCell) {
+                    const patternText = patternCell.textContent || patternCell.innerText;
+                    if (patternText.toUpperCase().indexOf(filter) > -1) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        // Initialize dropdown and fetch initial data
         populateDropdowns();
         fetchData();
     </script>
+
 </body>
 </html>
