@@ -12,7 +12,7 @@
             padding: 0;
             background-color: #f4f4f4;
             padding-bottom: 40px; /* Adding bottom padding to prevent overlap */
-             overflow-x: hidden;  /* Disable scrollbars */
+            overflow-x: hidden;  /* Disable scrollbars */
         }
 
         /* Navbar Styles */
@@ -65,16 +65,15 @@
 
         /* Table Styles */
         .table-container {
-            overflow-x: auto;  /* Enable horizontal scrolling */
             margin: 20px 0;
+            overflow-x: auto;  /* Allow horizontal scrolling if needed */
+            width: 100%;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            overflow-x: auto;
             border: 1px solid #ddd;
-            position: relative;
         }
 
         th, td {
@@ -134,10 +133,9 @@
         }
 
         #sync-icon {
-    display: none;
-}
+            display: none;
+        }
 
-        
         /* Stock In & Stock Out Sections */
         .stock-section {
             display: flex;
@@ -224,29 +222,22 @@
             }
         }
 
-        /* Remove overflow-x from the table and keep it on the table container */
-.table-container {
-    overflow-x: hidden;  /* Prevent horizontal scrolling */
-    margin: 20px 0;
-}
+        /* Ensure no scrolls appear when the table width exceeds its container */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+            position: relative;
+        }
 
-/* Ensure no scrolls appear when the table width exceeds its container */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #ddd;
-    position: relative;
-}
-
-/* Optional: If you want to fix a table's column headers and avoid horizontal scrolling */
-thead {
-    position: sticky;
-    top: 0;
-    background-color: #2C3930;
-    color: white;
-    z-index: 1;
-}
-
+        /* Optional: If you want to fix a table's column headers and avoid horizontal scrolling */
+        thead {
+            position: sticky;
+            top: 0;
+            background-color: #2C3930;
+            color: white;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
@@ -384,6 +375,28 @@ thead {
                 .catch(error => console.error('Error fetching data:', error));
         }
 
+        // Filter table based on input in the search field
+        function filterTable() {
+            const input = document.getElementById('search-input');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('sheet-data-table');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+                const cells = rows[i].getElementsByTagName('td');
+                const nameCell = cells[2]; // The Name column
+
+                if (nameCell) {
+                    const text = nameCell.textContent || nameCell.innerText;
+                    if (text.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
         // Add stock-in (send data to Apps Script Web App)
         function addStockIn() {
             const tyrePattern = document.getElementById('stockInTyrePattern').value.trim();
@@ -424,8 +437,8 @@ thead {
             const remarks = document.getElementById('stockOutRemarks').value.trim();
             const salesValue = parseFloat(document.getElementById('stockOutSalesValue').value);
 
-            if (tyrePattern && !isNaN(stockNumber)) {
-                fetch('https://script.google.com/macros/s/AKfycbwG8r71WeTCaaPD0rE-hrq_6Xp_fgevly_FPTCO3pNnuEE_J4WsaR5vFx5qqRLuxyM1Hw/exec', {  
+            if (tyrePattern && !isNaN(stockNumber) && customerName && vehicleNo && mobile && tyreSerialNo && !isNaN(price) && !isNaN(salesValue)) {
+                fetch('https://script.google.com/macros/s/AKfycbx6ZeNGO22qbRFOusjO6TmtoZMUdz8vtmZ8HD4SySHRm2qXWM9efDXrknEfwD8W9igrYA/exec', {  
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -440,8 +453,7 @@ thead {
                         tyreSerialNo: tyreSerialNo,
                         price: price,
                         remarks: remarks,
-                        salesValue: salesValue,
-                        date: document.getElementById('stockOutDate').value
+                        salesValue: salesValue
                     }),
                 })
                 .then(response => response.json())
@@ -455,36 +467,17 @@ thead {
             }
         }
 
-        // Show specific section when clicked
+        // Show the active section
         function showSection(sectionId) {
-            document.querySelectorAll('section').forEach(section => {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
                 section.classList.remove('active');
             });
 
             document.getElementById(sectionId).classList.add('active');
         }
 
-        // Filter table based on search input
-        function filterTable() {
-            const filter = document.getElementById('search-input').value.toUpperCase();
-            const rows = document.querySelector('#sheet-data-table tbody').rows;
-
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName('td');
-                const patternCell = cells[1]; // Column with the pattern name
-
-                if (patternCell) {
-                    const patternText = patternCell.textContent || patternCell.innerText;
-                    if (patternText.toUpperCase().indexOf(filter) > -1) {
-                        rows[i].style.display = '';
-                    } else {
-                        rows[i].style.display = 'none';
-                    }
-                }
-            }
-        }
-
-        // Initialize dropdown and fetch initial data
+        // Initialize dropdowns and fetch initial data
         populateDropdowns();
         fetchData();
     </script>
