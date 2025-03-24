@@ -84,7 +84,7 @@
         }
 
         td:first-child {
-            width: 15%;
+            width: 10%;
         }
 
         td:nth-child(3) {
@@ -207,8 +207,10 @@
             <thead>
                 <tr>
                     <th>S/No</th>
-                    <th>Tyre Pattern</th>
-                    <th>Stocks/Units</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Stocks</th>
+                    <th>RATE</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -295,7 +297,8 @@
                         row.forEach((cell, colIndex) => {
                             const td = document.createElement('td');
                             td.textContent = cell.trim();
-                            if (colIndex === 2) {
+
+                            if (colIndex === 3) {
                                 const stockValue = parseFloat(cell.trim());
                                 if (stockValue < 2) {
                                     td.classList.add('stocks-red');
