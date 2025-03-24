@@ -63,10 +63,14 @@
         }
 
         /* Table Styles */
+        .table-container {
+            overflow-x: auto;  /* Enable horizontal scrolling */
+            margin: 20px 0;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
             overflow-x: auto;
             border: 1px solid #ddd;
             position: relative;
@@ -128,6 +132,11 @@
             }
         }
 
+        #sync-icon {
+    display: none;
+}
+
+        
         /* Stock In & Stock Out Sections */
         .stock-section {
             display: flex;
@@ -173,12 +182,44 @@
                 padding: 8px 15px;
                 font-size: 14px;
             }
+
+            #search-input {
+                font-size: 14px;
+            }
+
+            .stock-section input, .stock-section select, .stock-section button {
+                font-size: 14px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 10px 12px;
+            }
         }
 
         @media (max-width: 480px) {
             nav a {
                 padding: 6px 12px;
                 font-size: 12px;
+            }
+
+            #search-input {
+                font-size: 12px;
+            }
+
+            .stock-section input, .stock-section select, .stock-section button {
+                font-size: 12px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px 10px;
             }
         }
 
@@ -203,18 +244,20 @@
         </div>
 
         <!-- Table to Display Stock Data -->
-        <table id="sheet-data-table">
-            <thead>
-                <tr>
-                    <th>S/No</th>
-                    <th>Date</th>
-                    <th>Name</th>
-                    <th>Stocks</th>
-                    <th>RATE</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="table-container">
+            <table id="sheet-data-table">
+                <thead>
+                    <tr>
+                        <th>S/No</th>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Stocks</th>
+                        <th>RATE</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </section>
 
     <!-- Stock In Section -->
