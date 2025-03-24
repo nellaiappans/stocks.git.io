@@ -84,7 +84,11 @@
         }
 
         td:first-child {
-            width: 15%;
+            width: 10%;
+        }
+
+        td:nth-child(3) {
+            font-weight: bold;
         }
 
         .stocks-red {
@@ -202,6 +206,7 @@
         <table id="sheet-data-table">
             <thead>
                 <tr>
+                    <th>S/No</th>
                     <th>Date</th>
                     <th>Name</th>
                     <th>Stocks</th>
@@ -212,33 +217,175 @@
         </table>
     </section>
 
+    <!-- Stock In Section -->
+    <section id="stockIn">
+        <h2>Stock In</h2>
+        <select id="stockInTyrePattern">
+            <!-- Dropdown options will be populated dynamically -->
+        </select>
+        <input type="number" id="stockInNumber" placeholder="Number of Items to Add" />
+        <button onclick="addStockIn()">Add Stock In</button>
+    </section>
+
+    <!-- Stock Out Section -->
+    <section id="stockOut">
+        <h2>Stock Out</h2>
+        <!-- New Input Fields -->
+        <input type="date" id="stockOutDate" placeholder="Date" />
+        <select id="stockOutTyrePattern">
+            <!-- Dropdown options will be populated dynamically -->
+        </select>
+        <input type="number" id="stockOutNumber" placeholder="Number of Items to Remove" />
+        <input type="text" id="stockOutCustomerName" placeholder="Customer Name" />
+        <input type="text" id="stockOutVehicleNo" placeholder="Vehicle No" />
+        <input type="tel" id="stockOutMobile" placeholder="Mobile" />
+        <input type="text" id="stockOutTyreSerialNo" placeholder="Tyre Serial No" />
+        <input type="number" id="stockOutPrice" placeholder="Price" />
+        <input type="text" id="stockOutRemarks" placeholder="Remarks" />
+        <input type="number" id="stockOutSalesValue" placeholder="Sales Value" />
+        
+        <!-- Submit Button -->
+        <button onclick="addStockOut()">Add Stock Out</button>
+    </section>
+
     <script>
-        // Function to fetch data from Google Sheets and populate the table
+        const tyrePatterns = [
+            '11.00 R20 LDR', '11.00 R20 RA1', '11.00 R20 RA', '11.00 R20 MD',
+            'T/L 295/80 R22.5 RA', 'T/L 295/80 R22.5 RD', 'T/L 235/75 R17.5 RA',
+            'T/L 235/75 R17.5 RD', 'T/L 215/75 R17.5 RD', '295/90 R20 MD',
+            '295/90 R20 MD+', '295/90 R20 ENDUTRAX MA', '295/90 R20 RA',
+            '295/90 R20 LD', '295/90 R20 RA(T)', '295/90 R20 MA', '10.00 20 AMAR GOLD',
+            '10.00 20 XT-7 GOLD', '9.00 20 LD', '900 16 TERRA', '8.25 R 20 LD',
+            '8.25 R 20 RA', '8.25 R 20 RA(T)', '8.25 20 Amar Gold', '8.25 20 XT - 7GOLD',
+            '8.25 R16 LD', '8.25 R16 RA', '8.25 16 Vihan Lug', '8.25 16 Vihan Rib',
+            '7.50 R16 LD', '7.50 R16 RA', '7.50 16 VIHAN  RIB', '7.00 16 VIHAN  RIB',
+            '7.00 R16 RA', '7.00 16 VIHAN LUG', '16.9 -28 Y-LON', '13.00-24 ARG217',
+            'Michelin 295/90 R20 Xmulti HDZ'
+        ];
+
+        // Function to populate dropdowns with tyre patterns
+        function populateDropdowns() {
+            const stockInDropdown = document.getElementById('stockInTyrePattern');
+            const stockOutDropdown = document.getElementById('stockOutTyrePattern');
+
+            tyrePatterns.forEach(pattern => {
+                let optionIn = document.createElement('option');
+                optionIn.value = pattern;
+                optionIn.textContent = pattern;
+                stockInDropdown.appendChild(optionIn);
+
+                let optionOut = document.createElement('option');
+                optionOut.value = pattern;
+                optionOut.textContent = pattern;
+                stockOutDropdown.appendChild(optionOut);
+            });
+        }
+
+        // Fetch data from Google Sheets URL and populate the table
         function fetchData() {
             fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?gid=2123538677&single=true&output=csv')
                 .then(response => response.text())
                 .then(data => {
                     const rows = data.split('\n').map(row => row.split(','));
                     const tbody = document.querySelector('#sheet-data-table tbody');
-                    tbody.innerHTML = ''; // Clear existing table data
+                    tbody.innerHTML = '';
 
                     rows.forEach((row, index) => {
                         if (index === 0 || row.length === 1 && row[0] === '') return;
 
-                        // Ensure we have the right number of columns
-                        const [date, name, stocks, rate] = row;
-
                         const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${date.trim()}</td>
-                            <td>${name.trim()}</td>
-                            <td>${stocks.trim()}</td>
-                            <td>${rate.trim()}</td>
-                        `;
+                        row.forEach((cell, colIndex) => {
+                            const td = document.createElement('td');
+                            td.textContent = cell.trim();
+
+                            if (colIndex === 3) {
+                                const stockValue = parseFloat(cell.trim());
+                                if (stockValue < 2) {
+                                    td.classList.add('stocks-red');
+                                } else if (stockValue >= 6) {
+                                    td.classList.add('stocks-green');
+                                } else {
+                                    td.classList.add('stocks-normal');
+                                }
+                            }
+                            tr.appendChild(td);
+                        });
+
                         tbody.appendChild(tr);
                     });
                 })
                 .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Add stock-in (send data to Apps Script Web App)
+        function addStockIn() {
+            const tyrePattern = document.getElementById('stockInTyrePattern').value.trim();
+            const stockNumber = parseInt(document.getElementById('stockInNumber').value);
+
+            if (tyrePattern && !isNaN(stockNumber)) {
+                fetch('https://script.google.com/macros/s/AKfycbx6ZeNGO22qbRFOusjO6TmtoZMUdz8vtmZ8HD4SySHRm2qXWM9efDXrknEfwD8W9igrYA/exec', {  
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'stockIn',
+                        tyrePattern: tyrePattern,
+                        number: stockNumber
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    fetchData(); // Reload data after update
+                })
+                .catch(error => alert('Error updating stock in: ' + error));
+            } else {
+                alert('Please provide valid data.');
+            }
+        }
+
+        // Add stock-out (send data to Apps Script Web App)
+        function addStockOut() {
+            const tyrePattern = document.getElementById('stockOutTyrePattern').value.trim();
+            const stockNumber = parseInt(document.getElementById('stockOutNumber').value);
+            const customerName = document.getElementById('stockOutCustomerName').value.trim();
+            const vehicleNo = document.getElementById('stockOutVehicleNo').value.trim();
+            const mobile = document.getElementById('stockOutMobile').value.trim();
+            const tyreSerialNo = document.getElementById('stockOutTyreSerialNo').value.trim();
+            const price = parseFloat(document.getElementById('stockOutPrice').value);
+            const remarks = document.getElementById('stockOutRemarks').value.trim();
+            const salesValue = parseFloat(document.getElementById('stockOutSalesValue').value);
+
+            if (tyrePattern && !isNaN(stockNumber)) {
+                fetch('https://script.google.com/macros/s/AKfycbwG8r71WeTCaaPD0rE-hrq_6Xp_fgevly_FPTCO3pNnuEE_J4WsaR5vFx5qqRLuxyM1Hw/exec', {  
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'stockOut',
+                        tyrePattern: tyrePattern,
+                        number: stockNumber,
+                        customerName: customerName,
+                        vehicleNo: vehicleNo,
+                        mobile: mobile,
+                        tyreSerialNo: tyreSerialNo,
+                        price: price,
+                        remarks: remarks,
+                        salesValue: salesValue,
+                        date: document.getElementById('stockOutDate').value
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    fetchData(); // Reload data after update
+                })
+                .catch(error => alert('Error updating stock out: ' + error));
+            } else {
+                alert('Please provide valid data.');
+            }
         }
 
         // Show specific section when clicked
@@ -257,11 +404,11 @@
 
             for (let i = 0; i < rows.length; i++) {
                 const cells = rows[i].getElementsByTagName('td');
-                const nameCell = cells[1]; // Column with the name
+                const patternCell = cells[1]; // Column with the pattern name
 
-                if (nameCell) {
-                    const nameText = nameCell.textContent || nameCell.innerText;
-                    if (nameText.toUpperCase().indexOf(filter) > -1) {
+                if (patternCell) {
+                    const patternText = patternCell.textContent || patternCell.innerText;
+                    if (patternText.toUpperCase().indexOf(filter) > -1) {
                         rows[i].style.display = '';
                     } else {
                         rows[i].style.display = 'none';
@@ -270,7 +417,8 @@
             }
         }
 
-        // Fetch initial data on page load
+        // Initialize dropdown and fetch initial data
+        populateDropdowns();
         fetchData();
     </script>
 
