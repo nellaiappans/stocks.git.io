@@ -12,6 +12,7 @@
             padding: 0;
             background-color: #f4f4f4;
             padding-bottom: 40px; /* Adding bottom padding to prevent overlap */
+             overflow-x: hidden;  /* Disable scrollbars */
         }
 
         /* Navbar Styles */
@@ -222,6 +223,29 @@
                 padding: 8px 10px;
             }
         }
+
+        /* Remove overflow-x from the table and keep it on the table container */
+.table-container {
+    overflow-x: hidden;  /* Prevent horizontal scrolling */
+    margin: 20px 0;
+}
+
+/* Ensure no scrolls appear when the table width exceeds its container */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    position: relative;
+}
+
+/* Optional: If you want to fix a table's column headers and avoid horizontal scrolling */
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #2C3930;
+    color: white;
+    z-index: 1;
+}
 
     </style>
 </head>
