@@ -340,50 +340,40 @@
         }
 
         // Fetch data from Google Sheets URL and populate the table
-       // Fetch data from Google Sheets URL and populate the table
-function fetchData() {
-    fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?gid=2123538677&single=true&output=csv')
-        .then(response => response.text())
-        .then(data => {
-            const rows = data.split('\n').map(row => row.split(','));
-            const tbody = document.querySelector('#sheet-data-table tbody');
-            tbody.innerHTML = ''; // Clear previous data
+        function fetchData() {
+            fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?gid=2123538677&single=true&output=csv')
+                .then(response => response.text())
+                .then(data => {
+                    const rows = data.split('\n').map(row => row.split(','));
+                    const tbody = document.querySelector('#sheet-data-table tbody');
+                    tbody.innerHTML = '';
 
-            rows.forEach((row, index) => {
-                if (index === 0 || row.length === 1 && row[0] === '') return; // Skip empty or header rows
+                    rows.forEach((row, index) => {
+                        if (index === 0 || row.length === 1 && row[0] === '') return;
 
-                const tr = document.createElement('tr');
-                row.forEach((cell, colIndex) => {
-                    const td = document.createElement('td');
-                    td.textContent = cell.trim();
+                        const tr = document.createElement('tr');
+                        row.forEach((cell, colIndex) => {
+                            const td = document.createElement('td');
+                            td.textContent = cell.trim();
 
-                    if (colIndex === 3) { // The "Stocks" column (assuming it is the 4th column)
-                        const stockValue = parseFloat(cell.trim());
+                            if (colIndex === 3) {
+                                const stockValue = parseFloat(cell.trim());
+                                if (stockValue < 2) {
+                                    td.classList.add('stocks-red');
+                                } else if (stockValue >= 6) {
+                                    td.classList.add('stocks-green');
+                                } else {
+                                    td.classList.add('stocks-normal');
+                                }
+                            }
+                            tr.appendChild(td);
+                        });
 
-                        // Highlight based on stock value
-                        if (stockValue < 2) {
-                            td.style.backgroundColor = '#F38C79'; // Below 2: red
-                        } else if (stockValue > 4) {
-                            td.style.backgroundColor = '#99BC85'; // Above 4: green
-                        }
-
-                        // Optional: Add a class for further styling if needed
-                        if (stockValue < 2) {
-                            td.classList.add('stocks-red');
-                        } else if (stockValue > 4) {
-                            td.classList.add('stocks-green');
-                        }
-                    }
-
-                    tr.appendChild(td);
-                });
-
-                tbody.appendChild(tr);
-            });
-        })
-        .catch(error => console.error('Error fetching data:', error));
-}
-
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
 
         // Filter table based on input in the search field
         function filterTable() {
