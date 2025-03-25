@@ -188,6 +188,28 @@
             </table>
         </div>
     </section>
+    <!-- Stock In Section Form -->
+<section id="stockIn" class="active">
+    <div style="text-align: center; margin-top: 20px;">
+        <h2>Stock In</h2>
+    </div>
+
+    <!-- Stock In Form -->
+    <form id="dataFormStack">
+        <label for="name">Name:</label>
+        <select id="name" name="name" required>
+            <option value="John Doe">John Doe</option>
+            <option value="Jane Smith">Jane Smith</option>
+            <option value="11.00 R20 RA1">11.00 R20 RA1</option>
+        </select><br><br>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" required><br><br>
+
+        <button type="submit">Save Data</button>
+    </form>
+</section>
+
 
     <script>
         // Fetch data from Google Sheets URL and populate the table
@@ -249,6 +271,41 @@
 
         // Initial data fetch
         fetchData();
+        
+    document.getElementById('dataFormStack').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevent default form submission
+
+    const name = document.getElementById('name').value;
+    const quantity = document.getElementById('quantity').value;
+
+    // Create a FormData object to hold the form data
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('quantity', quantity);
+
+    // The URL of the deployed Apps Script Web App
+    const appScriptURL = 'https://script.google.com/macros/s/AKfycbxbs57YAm88yElXRiYJ7eoTMtJNqbgw4GXF0kM5wQXpRkCXg5CiPbaCajhO5xtAD05cKw/exec';  // Replace with your Apps Script URL 
+
+    // Send the data to the Apps Script Web App using fetch
+    fetch(appScriptURL, {
+        method: 'POST',
+        body: formData  // FormData will automatically set the content type
+    })
+    .then(response => response.json())  // Assume the response is in JSON
+    .then(data => {
+        if (data.result === 'success') {
+            alert('Data saved successfully!');
+            document.getElementById('dataFormStack').reset();  // Reset the form after submission
+        } else {
+            alert('Error saving data: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting form');
+    });
+});
+
     </script>
 
 </body>
