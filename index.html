@@ -21,19 +21,32 @@
             padding: 10px;
             text-align: center;
             width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         nav a {
             color: white;
             padding: 10px 20px;
             text-decoration: none;
-            margin: 0 10px;
+            margin: 5px;
             font-weight: bold;
             border-radius: 4px;
+            font-size: 16px; /* Default font size */
+            white-space: nowrap;
         }
 
         nav a:hover {
             background-color: #4CAF50;
+        }
+
+        /* Make Navbar Links Responsive */
+        @media (max-width: 600px) {
+            nav a {
+                font-size: 14px; /* Smaller font size for mobile */
+                padding: 8px 15px;
+            }
         }
 
         /* General Section Styles */
@@ -134,6 +147,11 @@
 
         #sync-icon {
             display: none;
+        }
+
+        /* Avoid horizontal scrolling */
+        body {
+            overflow-x: hidden;
         }
     </style>
 </head>
