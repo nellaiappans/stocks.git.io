@@ -153,6 +153,135 @@
         body {
             overflow-x: hidden;
         }
+    /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    padding-bottom: 40px;
+    overflow-x: hidden;
+}
+
+/* Stock In Form Styling */
+#dataFormStack {
+    max-width: 500px; /* Limit form width on larger screens */
+    margin: 0 auto;   /* Center the form horizontally */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#dataFormStack label {
+    font-size: 18px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+#dataFormStack select, #dataFormStack input {
+    width: 100%; /* Make inputs full-width */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#savestockinbtn {
+    width: 100%; /* Make the button full-width */
+    padding: 10px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#savestockinbtn:hover {
+    background-color: #45a049;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    #dataFormStack {
+        padding: 15px; /* Less padding on smaller screens */
+    }
+
+    #dataFormStack label {
+        font-size: 16px; /* Slightly smaller label font size */
+    }
+
+    #dataFormStack input, #dataFormStack select {
+        font-size: 14px; /* Adjust font size for smaller screens */
+    }
+
+    #savestockinbtn {
+        font-size: 14px; /* Adjust font size for the button */
+    }
+}
+
+@media (max-width: 480px) {
+    #dataFormStack {
+        max-width: 90%; /* Form will take up more width on very small screens */
+        margin: 0 5%; /* Center the form with some margin on small screens */
+    }
+
+    #dataFormStack label {
+        font-size: 14px; /* Further reduce font size on very small screens */
+    }
+
+    #dataFormStack input, #dataFormStack select {
+        font-size: 14px; /* Adjust font size for smaller form fields */
+    }
+
+    #savestockinbtn {
+        font-size: 14px; /* Adjust button font size */
+    }
+}
+/* Spinner Styles */
+/* Spinner Styles */
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+}
+
+/* Animation for spinner */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Style for centering the button and spinner */
+#savestockinbtn {
+    position: relative;
+    padding-right: 35px; /* Add padding to the right side to make room for the spinner */
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Spinner centering inside button */
+#spinner {
+    position: absolute;
+    right: 10px; /* Place the spinner to the right */
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+}
+
+/* Hide the spinner by default */
+#spinner {
+    display: none;
+}
+
+
     </style>
 </head>
 <body>
@@ -195,20 +324,62 @@
     </div>
 
     <!-- Stock In Form -->
-    <form id="dataFormStack">
-        <label for="name">Name:</label>
-        <select id="name" name="name" required>
-            <option value="John Doe">John Doe</option>
-            <option value="Jane Smith">Jane Smith</option>
-            <option value="11.00 R20 RA1">11.00 R20 RA1</option>
-        </select><br><br>
+   <form id="dataFormStack">
+    <label for="name">Name:</label>
+   <select id="name" name="name" required>
+    <option value="11.00 R20 LDR">11.00 R20 LDR</option>
+    <option value="11.00 R20 RA1">11.00 R20 RA1</option>
+    <option value="11.00 R20 RA">11.00 R20 RA</option>
+    <option value="11.00 R20 MD">11.00 R20 MD</option>
+    <option value="11.00 R20 Endu Trax MA">11.00 R20 Endu Trax MA</option>
+    <option value="T/L 295/80 R22.5 RA">T/L 295/80 R22.5 RA</option>
+    <option value="T/L 295/80 R22.5 RD2">T/L 295/80 R22.5 RD2</option>
+    <option value="T/L 295/80 R22.5 EnduComfort CA2">T/L 295/80 R22.5 EnduComfort CA2</option>
+    <option value="T/L 235/75 R17.5 RA">T/L 235/75 R17.5 RA</option>
+    <option value="T/L 235/75 R17.5 RD">T/L 235/75 R17.5 RD</option>
+    <option value="T/L 215/75 R17.5 RD">T/L 215/75 R17.5 RD</option>
+    <option value="295/90 R20 MD">295/90 R20 MD</option>
+    <option value="295/90 R20 MD+">295/90 R20 MD+</option>
+    <option value="295/90 R20 ENDUTRAX MA">295/90 R20 ENDUTRAX MA</option>
+    <option value="295/90 R20 RA">295/90 R20 RA</option>
+    <option value="295/90 R20 LD">295/90 R20 LD</option>
+    <option value="295/90 R20 RA(T)">295/90 R20 RA(T)</option>
+    <option value="295/90 R20 MA">295/90 R20 MA</option>
+    <option value="10.00 20 AMAR GOLD">10.00 20 AMAR GOLD</option>
+    <option value="10.00 20 XT-7 GOLD">10.00 20 XT-7 GOLD</option>
+    <option value="9.00 20 LD+">9.00 20 LD+</option>
+    <option value="900 16 TERRA">900 16 TERRA</option>
+    <option value="8.25 R 20 LD">8.25 R 20 LD</option>
+    <option value="8.25 R 20 RA">8.25 R 20 RA</option>
+    <option value="8.25 R 20 RA(T)">8.25 R 20 RA(T)</option>
+    <option value="8.25 20 Amar Gold">8.25 20 Amar Gold</option>
+    <option value="8.25 20 XT - 7GOLD">8.25 20 XT - 7GOLD</option>
+    <option value="8.25 R16 LD">8.25 R16 LD</option>
+    <option value="8.25 R16 RA">8.25 R16 RA</option>
+    <option value="8.25 16 Vihan Lug">8.25 16 Vihan Lug</option>
+    <option value="8.25 16 Vihan Rib">8.25 16 Vihan Rib</option>
+    <option value="7.50 R16 LD">7.50 R16 LD</option>
+    <option value="7.50 R16 RA">7.50 R16 RA</option>
+    <option value="7.50 16 VIHAN RIB">7.50 16 VIHAN RIB</option>
+    <option value="7.00 16 VIHAN RIB">7.00 16 VIHAN RIB</option>
+    <option value="7.00 R16 RA">7.00 R16 RA</option>
+    <option value="7.00 16 VIHAN LUG">7.00 16 VIHAN LUG</option>
+    <option value="16.9 -28 Y-LON">16.9 -28 Y-LON</option>
+    <option value="13.00-24 ARG217">13.00-24 ARG217</option>
+    <option value="Michelin 295/90 R20 Xmulti HDZ">Michelin 295/90 R20 Xmulti HDZ</option>
+    <option value="Michelin 295/90 R20 Xmulti Energy D">Michelin 295/90 R20 Xmulti Energy D</option>
+</select>
+<br><br>
 
-        <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" name="quantity" required><br><br>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" required><br><br>
 
-        <button type="submit">Save Data</button>
-    </form>
-</section>
+    <button type="submit" id="savestockinbtn">Save Data</button>
+    <div id="spinner" style="display: none; margin-left: 10px; vertical-align: middle;">
+        <div class="loader"></div>
+    </div>
+</form>
+
 
 
     <script>
@@ -278,6 +449,10 @@
     const name = document.getElementById('name').value;
     const quantity = document.getElementById('quantity').value;
 
+    // Show the spinner and disable the submit button
+    document.getElementById('spinner').style.display = 'inline-block';
+    document.getElementById('savestockinbtn').disabled = true;
+
     // Create a FormData object to hold the form data
     const formData = new FormData();
     formData.append('name', name);
@@ -291,11 +466,10 @@
         method: 'POST',
         body: formData  // FormData will automatically set the content type
     })
-    .then(response => response.json())  // Assume the response is in JSON
+    .then(response => response.json())
     .then(data => {
         if (data.result === 'success') {
             alert('Data saved successfully!');
-            document.getElementById('dataFormStack').reset();  // Reset the form after submission
         } else {
             alert('Error saving data: ' + data.message);
         }
@@ -303,6 +477,11 @@
     .catch(error => {
         console.error('Error:', error);
         alert('Error submitting form');
+    })
+    .finally(() => {
+        // Hide the spinner and re-enable the submit button
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('savestockinbtn').disabled = false;
     });
 });
 
