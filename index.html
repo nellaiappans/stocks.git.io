@@ -153,34 +153,144 @@
         body {
             overflow-x: hidden;
         }
-    /* General Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    padding-bottom: 40px;
-    overflow-x: hidden;
-}
+    /* Stock In Form Styling */
+    #dataFormStack {
+        max-width: 500px; /* Limit form width on larger screens */
+        margin: 0 auto;   /* Center the form horizontally */
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-/* Stock In Form Styling */
-#dataFormStack {
-    max-width: 500px; /* Limit form width on larger screens */
-    margin: 0 auto;   /* Center the form horizontally */
+    #dataFormStack label {
+        font-size: 18px;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    #dataFormStack select, #dataFormStack input {
+        width: 100%; /* Make inputs full-width */
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    #savestockinbtn {
+        width: 100%; /* Make the button full-width */
+        padding: 10px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #savestockinbtn:hover {
+        background-color: #45a049;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        #dataFormStack {
+            padding: 15px; /* Less padding on smaller screens */
+        }
+
+        #dataFormStack label {
+            font-size: 16px; /* Slightly smaller label font size */
+        }
+
+        #dataFormStack input, #dataFormStack select {
+            font-size: 14px; /* Adjust font size for smaller screens */
+        }
+
+        #savestockinbtn {
+            font-size: 14px; /* Adjust font size for the button */
+        }
+    }
+
+    @media (max-width: 480px) {
+        #dataFormStack {
+            max-width: 90%; /* Form will take up more width on very small screens */
+            margin: 0 5%; /* Center the form with some margin on small screens */
+        }
+
+        #dataFormStack label {
+            font-size: 14px; /* Further reduce font size on very small screens */
+        }
+
+        #dataFormStack input, #dataFormStack select {
+            font-size: 14px; /* Adjust font size for smaller form fields */
+        }
+
+        #savestockinbtn {
+            font-size: 14px; /* Adjust button font size */
+        }
+    }
+    /* Spinner Styles */
+    /* Spinner Styles */
+    .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;
+    }
+
+    /* Animation for spinner */
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Style for centering the button and spinner */
+    #savestockinbtn {
+        position: relative;
+        padding-right: 35px; /* Add padding to the right side to make room for the spinner */
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    /* Spinner centering inside button */
+    #spinner {
+        position: absolute;
+        right: 10px; /* Place the spinner to the right */
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-block;
+    }
+
+    /* Hide the spinner by default */
+    #spinner {
+        display: none;
+    }
+    
+/* style.css */
+
+/* Stock Out Form Styling */
+#dataFormStockOut {
+    max-width: 500px;
+    margin: 0 auto;
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#dataFormStack label {
+#dataFormStockOut label {
     font-size: 18px;
     margin-bottom: 5px;
     display: block;
 }
 
-#dataFormStack select, #dataFormStack input {
-    width: 100%; /* Make inputs full-width */
+#dataFormStockOut select, #dataFormStockOut input {
+    width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ddd;
@@ -189,8 +299,8 @@ body {
     box-sizing: border-box;
 }
 
-#savestockinbtn {
-    width: 100%; /* Make the button full-width */
+#savestockoutbtn {
+    width: 100%;
     padding: 10px;
     font-size: 16px;
     background-color: #4CAF50;
@@ -200,48 +310,47 @@ body {
     cursor: pointer;
 }
 
-#savestockinbtn:hover {
+#savestockoutbtn:hover {
     background-color: #45a049;
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
-    #dataFormStack {
-        padding: 15px; /* Less padding on smaller screens */
+    #dataFormStockOut {
+        padding: 15px;
     }
 
-    #dataFormStack label {
-        font-size: 16px; /* Slightly smaller label font size */
+    #dataFormStockOut label {
+        font-size: 16px;
     }
 
-    #dataFormStack input, #dataFormStack select {
-        font-size: 14px; /* Adjust font size for smaller screens */
+    #dataFormStockOut input, #dataFormStockOut select {
+        font-size: 14px;
     }
 
-    #savestockinbtn {
-        font-size: 14px; /* Adjust font size for the button */
+    #savestockoutbtn {
+        font-size: 14px;
     }
 }
 
 @media (max-width: 480px) {
-    #dataFormStack {
-        max-width: 90%; /* Form will take up more width on very small screens */
-        margin: 0 5%; /* Center the form with some margin on small screens */
+    #dataFormStockOut {
+        max-width: 90%;
+        margin: 0 5%;
     }
 
-    #dataFormStack label {
-        font-size: 14px; /* Further reduce font size on very small screens */
+    #dataFormStockOut label {
+        font-size: 14px;
     }
 
-    #dataFormStack input, #dataFormStack select {
-        font-size: 14px; /* Adjust font size for smaller form fields */
+    #dataFormStockOut input, #dataFormStockOut select {
+        font-size: 14px;
     }
 
-    #savestockinbtn {
-        font-size: 14px; /* Adjust button font size */
+    #savestockoutbtn {
+        font-size: 14px;
     }
 }
-/* Spinner Styles */
+
 /* Spinner Styles */
 .loader {
     border: 4px solid #f3f3f3;
@@ -252,33 +361,18 @@ body {
     animation: spin 1s linear infinite;
 }
 
-/* Animation for spinner */
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-/* Style for centering the button and spinner */
-#savestockinbtn {
-    position: relative;
-    padding-right: 35px; /* Add padding to the right side to make room for the spinner */
-    display: inline-block;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* Spinner centering inside button */
 #spinner {
     position: absolute;
-    right: 10px; /* Place the spinner to the right */
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: inline-block;
-}
-
-/* Hide the spinner by default */
-#spinner {
-    display: none;
+    visibility: hidden;
 }
 
 
@@ -317,70 +411,70 @@ body {
             </table>
         </div>
     </section>
+
     <!-- Stock In Section Form -->
-<section id="stockIn" class="active">
-    <div style="text-align: center; margin-top: 20px;">
-        <h2>Stock In</h2>
-    </div>
+    <section id="stockIn">
+        <div style="text-align: center; margin-top: 20px;">
+            <h2>Stock In</h2>
+        </div>
 
-    <!-- Stock In Form -->
-   <form id="dataFormStack">
+        <!-- Stock In Form -->
+        <form id="dataFormStack">
+            <label for="name">Name:</label>
+            <select id="name" name="name" required>
+                <option value="11.00 R20 LDR">11.00 R20 LDR</option>
+                <option value="11.00 R20 RA1">11.00 R20 RA1</option>
+            </select>
+            <br><br>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required><br><br>
+
+            <button type="submit" id="savestockinbtn">Save Data</button>
+            <div id="spinner" style="display: none; margin-left: 10px; vertical-align: middle;">
+                <div class="loader"></div>
+            </div>
+        </form>
+    </section>
+
+    <!-- Stock Out Section Form -->
+    <section id="stockOut">
+        <div style="text-align: center; margin-top: 20px;">
+            <h2>Stock Out</h2>
+        </div>
+
+        <!-- Stock Out Form -->
+      <form id="dataFormStockOut">
+    <!-- Name Selection -->
     <label for="name">Name:</label>
-   <select id="name" name="name" required>
-    <option value="11.00 R20 LDR">11.00 R20 LDR</option>
-    <option value="11.00 R20 RA1">11.00 R20 RA1</option>
-    <option value="11.00 R20 RA">11.00 R20 RA</option>
-    <option value="11.00 R20 MD">11.00 R20 MD</option>
-    <option value="11.00 R20 Endu Trax MA">11.00 R20 Endu Trax MA</option>
-    <option value="T/L 295/80 R22.5 RA">T/L 295/80 R22.5 RA</option>
-    <option value="T/L 295/80 R22.5 RD2">T/L 295/80 R22.5 RD2</option>
-    <option value="T/L 295/80 R22.5 EnduComfort CA2">T/L 295/80 R22.5 EnduComfort CA2</option>
-    <option value="T/L 235/75 R17.5 RA">T/L 235/75 R17.5 RA</option>
-    <option value="T/L 235/75 R17.5 RD">T/L 235/75 R17.5 RD</option>
-    <option value="T/L 215/75 R17.5 RD">T/L 215/75 R17.5 RD</option>
-    <option value="295/90 R20 MD">295/90 R20 MD</option>
-    <option value="295/90 R20 MD+">295/90 R20 MD+</option>
-    <option value="295/90 R20 ENDUTRAX MA">295/90 R20 ENDUTRAX MA</option>
-    <option value="295/90 R20 RA">295/90 R20 RA</option>
-    <option value="295/90 R20 LD">295/90 R20 LD</option>
-    <option value="295/90 R20 RA(T)">295/90 R20 RA(T)</option>
-    <option value="295/90 R20 MA">295/90 R20 MA</option>
-    <option value="10.00 20 AMAR GOLD">10.00 20 AMAR GOLD</option>
-    <option value="10.00 20 XT-7 GOLD">10.00 20 XT-7 GOLD</option>
-    <option value="9.00 20 LD+">9.00 20 LD+</option>
-    <option value="900 16 TERRA">900 16 TERRA</option>
-    <option value="8.25 R 20 LD">8.25 R 20 LD</option>
-    <option value="8.25 R 20 RA">8.25 R 20 RA</option>
-    <option value="8.25 R 20 RA(T)">8.25 R 20 RA(T)</option>
-    <option value="8.25 20 Amar Gold">8.25 20 Amar Gold</option>
-    <option value="8.25 20 XT - 7GOLD">8.25 20 XT - 7GOLD</option>
-    <option value="8.25 R16 LD">8.25 R16 LD</option>
-    <option value="8.25 R16 RA">8.25 R16 RA</option>
-    <option value="8.25 16 Vihan Lug">8.25 16 Vihan Lug</option>
-    <option value="8.25 16 Vihan Rib">8.25 16 Vihan Rib</option>
-    <option value="7.50 R16 LD">7.50 R16 LD</option>
-    <option value="7.50 R16 RA">7.50 R16 RA</option>
-    <option value="7.50 16 VIHAN RIB">7.50 16 VIHAN RIB</option>
-    <option value="7.00 16 VIHAN RIB">7.00 16 VIHAN RIB</option>
-    <option value="7.00 R16 RA">7.00 R16 RA</option>
-    <option value="7.00 16 VIHAN LUG">7.00 16 VIHAN LUG</option>
-    <option value="16.9 -28 Y-LON">16.9 -28 Y-LON</option>
-    <option value="13.00-24 ARG217">13.00-24 ARG217</option>
-    <option value="Michelin 295/90 R20 Xmulti HDZ">Michelin 295/90 R20 Xmulti HDZ</option>
-    <option value="Michelin 295/90 R20 Xmulti Energy D">Michelin 295/90 R20 Xmulti Energy D</option>
-</select>
-<br><br>
+    <select id="name" name="name" required>
+        <!-- Options for names -->
+        <option value="11.00 R20 LDR">11.00 R20 LDR</option>
+        <option value="11.00 R20 RA1">11.00 R20 RA1</option>
+        <!-- More options here -->
+    </select>
 
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" name="quantity" required><br><br>
+    <input type="number" id="quantity" name="quantity" placeholder="Quantity" required><br><br>
 
-    <button type="submit" id="savestockinbtn">Save Data</button>
-    <div id="spinner" style="display: none; margin-left: 10px; vertical-align: middle;">
-        <div class="loader"></div>
-    </div>
+    <input type="text" id="customer_name" name="customer_name" placeholder="Customer Name"><br><br>
+
+    <input type="text" id="vehicle_no" name="vehicle_no" placeholder="Vehicle No"><br><br>
+
+    <input type="text" id="mobile" name="mobile" placeholder="Mobile"><br><br>
+
+    <input type="text" id="serial_no" name="serial_no" placeholder="Serial No" required><br><br>
+
+    <input type="number" id="price" name="price" placeholder="Price"><br><br>
+
+    <input type="text" id="remarks" name="remarks" placeholder="Remarks"><br><br>
+
+    <input type="number" id="sales_value" name="sales_value" placeholder="Sales Value"><br><br>
+
+    <button type="submit" id="savestockoutbtn">Save Data</button>
+    <div id="spinner" class="loader"></div>
 </form>
-
-
+        </form>
+    </section>
 
     <script>
         // Fetch data from Google Sheets URL and populate the table
@@ -408,28 +502,6 @@ body {
                 .catch(error => console.error('Error fetching data:', error));
         }
 
-        // Filter table based on input in the search field
-        function filterTable() {
-            const input = document.getElementById('search-input');
-            const filter = input.value.toLowerCase();
-            const table = document.getElementById('sheet-data-table');
-            const rows = table.getElementsByTagName('tr');
-
-            for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
-                const cells = rows[i].getElementsByTagName('td');
-                const nameCell = cells[1]; // The Name column
-
-                if (nameCell) {
-                    const text = nameCell.textContent || nameCell.innerText;
-                    if (text.toLowerCase().indexOf(filter) > -1) {
-                        rows[i].style.display = ''; // Show matching row
-                    } else {
-                        rows[i].style.display = 'none'; // Hide non-matching row
-                    }
-                }
-            }
-        }
-
         // Show the active section
         function showSection(sectionId) {
             const sections = document.querySelectorAll('section');
@@ -443,6 +515,67 @@ body {
         // Initial data fetch
         fetchData();
         
+    // script.js
+
+// Replace this with your Google Apps Script web app URL
+const appScriptURL = 'https://script.google.com/macros/s/AKfycbypVYyx9zaGln9zVTVasCUJToZpWG0_pmdPidSf6pCOWReXnyMUeE-dNREYFETsMVa7cg/exec';
+
+document.getElementById('dataFormStockOut').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevent the form from reloading the page
+
+    // Show spinner during submission
+    document.getElementById('spinner').style.display = 'inline-block';
+    document.getElementById('savestockoutbtn').disabled = true;  // Disable button
+
+    // Collect form values
+    const name = document.getElementById('name').value;
+    const quantity = document.getElementById('quantity').value;
+    const customerName = document.getElementById('customer_name').value;
+    const vehicleNo = document.getElementById('vehicle_no').value;
+    const mobile = document.getElementById('mobile').value;
+    const serialNo = document.getElementById('serial_no').value;
+    const price = document.getElementById('price').value;
+    const remarks = document.getElementById('remarks').value;
+    const salesValue = document.getElementById('sales_value').value;
+
+    // Create a FormData object and append the form data
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('quantity', quantity);
+    formData.append('customer_name', customerName);
+    formData.append('vehicle_no', vehicleNo);
+    formData.append('mobile', mobile);
+    formData.append('serial_no', serialNo);
+    formData.append('price', price);
+    formData.append('remarks', remarks);
+    formData.append('sales_value', salesValue);
+
+    // Send the data to Google Apps Script via a POST request
+    fetch(appScriptURL, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Hide spinner and re-enable button
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('savestockoutbtn').disabled = false;
+
+        if (data.result === "success") {
+            alert('Data saved successfully!');
+            document.getElementById('dataFormStockOut').reset();  // Clear the form after submission
+        } else {
+            alert('Error saving data!');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting form');
+        document.getElementById('spinner').style.display = 'none'; // Hide spinner in case of error
+        document.getElementById('savestockoutbtn').disabled = false;
+    });
+});
+      
     document.getElementById('dataFormStack').addEventListener('submit', function(event) {
     event.preventDefault();  // Prevent default form submission
 
@@ -484,6 +617,7 @@ body {
         document.getElementById('savestockinbtn').disabled = false;
     });
 });
+
 
     </script>
 
