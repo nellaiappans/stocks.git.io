@@ -618,6 +618,23 @@ document.getElementById('dataFormStockOut').addEventListener('submit', function(
     });
 });
 
+function filterTable() {
+    const searchInput = document.getElementById('search-input').value.toLowerCase(); // Get the search query
+    const rows = document.querySelectorAll('#sheet-data-table tbody tr'); // Get all table rows
+
+    rows.forEach(row => {
+        const nameCell = row.cells[1]; // Assuming "Name" is in the second column (index 1)
+        
+        if (nameCell) {
+            const nameText = nameCell.textContent.toLowerCase();
+            if (nameText.includes(searchInput)) {
+                row.style.display = ''; // Show row if "Name" column contains search input
+            } else {
+                row.style.display = 'none'; // Hide row if no match
+            }
+        }
+    });
+}
 
     </script>
 
