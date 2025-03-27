@@ -486,7 +486,7 @@
       <form id="dataFormStockOut">
     <!-- Name Selection -->
     <label for="name">Name:</label>
-    <select id="name" name="name" required>
+    <select id="name01" name="name" required>
         <!-- Options for names -->
          <option value="11.00 R20 LDR">11.00 R20 LDR</option>
     <option value="11.00 R20 RA1">11.00 R20 RA1</option>
@@ -606,7 +606,7 @@ document.getElementById('dataFormStockOut').addEventListener('submit', function(
     document.getElementById('savestockoutbtn').disabled = true;  // Disable button
 
     // Collect form values
-    const name = document.getElementById('name').value;
+    const name = document.getElementById('name01').value;
     const quantity = document.getElementById('quantity01').value;
     const customerName = document.getElementById('customer_name').value;
     const vehicleNo = document.getElementById('vehicle_no').value;
