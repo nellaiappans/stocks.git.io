@@ -382,7 +382,30 @@
     100% { transform: rotate(360deg); }
 }
 
+  /* Add some styles for the footer */
+    footer {
+        text-align: center;
+        background-color: #f0f0f0;
+        padding: 10px;
+        color: #8a8a8a; /* Light grey color */
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        opacity: 0; /* Start with invisible footer */
+        animation: footerAnimation 1.5s ease-out forwards; /* Apply the fade-in animation */
+    }
 
+    /* Define the footer animation */
+    @keyframes footerAnimation {
+        0% {
+            opacity: 0;
+            transform: translateY(100px); /* Start with the footer below the screen */
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0); /* End with the footer in its final position */
+        }
+    }
 
     </style>
 </head>
@@ -565,7 +588,10 @@
 </form>
         </form>
     </section>
-
+ <!-- Footer Section -->
+    <footer>
+        Powered by NELLAI
+    </footer>
     <script>
         // Fetch data from Google Sheets URL and populate the table
        function fetchData() {
