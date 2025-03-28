@@ -568,29 +568,42 @@
 
     <script>
         // Fetch data from Google Sheets URL and populate the table
-        function fetchData() {
-            fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?gid=2123538677&single=true&output=csv')
-                .then(response => response.text())
-                .then(data => {
-                    const rows = data.split('\n').map(row => row.split(','));
-                    const tbody = document.querySelector('#sheet-data-table tbody');
-                    tbody.innerHTML = ''; // Clear the existing rows
+       function fetchData() {
+    fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?gid=2123538677&single=true&output=csv')
+        .then(response => response.text())
+        .then(data => {
+            const rows = data.split('\n').map(row => row.split(','));
+            const tbody = document.querySelector('#sheet-data-table tbody');
+            tbody.innerHTML = ''; // Clear the existing rows
 
-                    rows.forEach((row, index) => {
-                        if (index === 0 || row.length === 1 && row[0] === '') return;
+            rows.forEach((row, index) => {
+                if (index === 0 || row.length === 1 && row[0] === '') return;
 
-                        const tr = document.createElement('tr');
-                        row.forEach((cell, colIndex) => {
-                            const td = document.createElement('td');
-                            td.textContent = cell.trim();
-                            tr.appendChild(td);
-                        });
+                const tr = document.createElement('tr');
+                
+                row.forEach((cell, colIndex) => {
+                    const td = document.createElement('td');
+                    td.textContent = cell.trim();
 
-                        tbody.appendChild(tr);
-                    });
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        }
+                    // Highlight Columns 1, 2, and 3 if Column 3 (index 2) is blank
+                    if (colIndex === 2 && !cell.trim()) {
+                        // If Column 3 is blank, highlight Column 1, 2, and 3
+                        for (let i = 0; i < 3; i++) {
+                            const cellToHighlight = tr.children[i] || td; // Get the cell to highlight
+                            if (cellToHighlight) {
+                                cellToHighlight.style.backgroundColor = '#FF9A9A'; // Apply background color
+                            }
+                        }
+                    }
+
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
 
         // Show the active section
         function showSection(sectionId) {
