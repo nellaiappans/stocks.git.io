@@ -542,11 +542,11 @@
 
     <input type="number" id="quantity01" name="quantity" placeholder="Quantity" required><br><br>
 
-    <input type="text" id="customer_name" name="customer_name" placeholder="Customer Name"  text-transform: uppercase;><br><br>
+    <input type="text" id="customer_name"  class="uppercase-input01" name="customer_name" placeholder="Customer Name"><br><br>
 
-    <input type="text" id="vehicle_no" name="vehicle_no" placeholder="Vehicle No"  text-transform: uppercase;><br><br>
+    <input type="text" id="vehicle_no"  class="uppercase-input" name="vehicle_no" placeholder="Vehicle No"><br><br>
 
-    <input type="text" id="mobile" name="mobile" placeholder="Mobile"><br><br>
+    <input type="number" id="mobile" name="mobile" placeholder="Mobile"><br><br>
 
 <textarea id="serial_no" name="serial_no" placeholder="Serial No" required style="text-transform: uppercase;"></textarea><br><br>
 
@@ -729,6 +729,14 @@ function filterTable() {
         }
     });
 }
+// Convert text to uppercase for all inputs with the 'uppercase-input' class
+document.querySelector('.uppercase-input').addEventListener('input', function(event) {
+    event.target.value = event.target.value.toUpperCase();
+});
+document.querySelector('.uppercase-input01').addEventListener('input', function(event) {
+    event.target.value = event.target.value.toUpperCase();
+});
+
 
     </script>
 
