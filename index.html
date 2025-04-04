@@ -594,7 +594,7 @@
     </footer>
     <script>
         // Fetch data from Google Sheets URL and populate the table
-       function fetchData() {
+  function fetchData() {
     fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?gid=2123538677&single=true&output=csv')
         .then(response => response.text())
         .then(data => {
@@ -606,30 +606,32 @@
                 if (index === 0 || row.length === 1 && row[0] === '') return;
 
                 const tr = document.createElement('tr');
-                
+                const tdElements = [];
+
                 row.forEach((cell, colIndex) => {
                     const td = document.createElement('td');
                     td.textContent = cell.trim();
-
-                    // Highlight Columns 1, 2, and 3 if Column 3 (index 2) is blank
-                    if (colIndex === 2 && !cell.trim()) {
-                        // If Column 3 is blank, highlight Column 1, 2, and 3
-                        for (let i = 0; i < 3; i++) {
-                            const cellToHighlight = tr.children[i] || td; // Get the cell to highlight
-                            if (cellToHighlight) {
-                                cellToHighlight.style.backgroundColor = '#FF9A9A'; // Apply background color
-                            }
-                        }
-                    }
-
+                    tdElements.push(td); // Save td elements in an array for later use
                     tr.appendChild(td);
                 });
+
+                // Check if Column 3 (index 2) is zero
+                if (parseFloat(row[2].trim()) === 0) {
+                    // Highlight Columns 1, 2, and 3 (indices 0, 1, 2)
+                    for (let i = 0; i < 3; i++) {
+                        const cellToHighlight = tdElements[i]; // Get the td element for the current column
+                        if (cellToHighlight) {
+                            cellToHighlight.style.backgroundColor = '#FF9A9A'; // Apply background color
+                        }
+                    }
+                }
 
                 tbody.appendChild(tr);
             });
         })
         .catch(error => console.error('Error fetching data:', error));
 }
+
 
         // Show the active section
         function showSection(sectionId) {
