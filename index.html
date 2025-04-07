@@ -779,6 +779,94 @@ document.querySelector('.uppercase-input01').addEventListener('input', function(
 });
 
 
+// pin set
+
+ let correctPin = '19940822'; // Correct PIN that will be saved in cookies
+let pinAskEveryTime = '2887'; // PIN that asks every time
+let pinCookieName = 'userPin'; // Cookie name to store PIN status
+
+// Variable to keep track of the last active section
+let lastActiveSection = 'dashboard'; // Default to 'dashboard' section
+
+// Function to set a cookie
+function setCookie(name, value, days) {
+    let date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Set cookie expiration
+    let expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+// Function to get a cookie by name
+function getCookie(name) {
+    let nameEQ = name + "=";
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+// Function to show sections and validate PIN if needed
+function showSection(section) {
+    // Hide all sections first
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+        section.style.display = 'none';
+    });
+
+    // Check the saved PIN cookie
+    let savedPin = getCookie(pinCookieName);
+
+    if (savedPin === correctPin) {
+        // If the correct PIN is saved, skip PIN prompt
+        document.getElementById(section).style.display = 'block';
+        lastActiveSection = section; // Update last active section
+    } else if (savedPin === pinAskEveryTime || section === 'stockIn' || section === 'stockOut') {
+        // If it's the PIN that asks every time (1234), or if it's restricted (stockIn or stockOut)
+        let pin = prompt("Please enter your PIN to access this section:");
+
+        if (pin === correctPin) {
+            alert("Access granted By Nellai to " + section);
+            setCookie(pinCookieName, correctPin, 30); // Save correct PIN in cookies for 30 days
+            document.getElementById(section).style.display = 'block'; // Display the section
+            lastActiveSection = section; // Update last active section
+        } else if (pin === pinAskEveryTime) {
+            alert("PIN Entered Pavithra Tyres Truck Alignmet.");
+            document.getElementById(section).style.display = 'block'; // Display the section
+            lastActiveSection = section; // Update last active section
+        } else {
+            alert("Incorrect PIN. Access denied by Nellai.");
+            // Keep the previous active section visible
+            document.getElementById(lastActiveSection).style.display = 'block';
+        }
+    } else {
+        // For other sections, display directly without PIN prompt
+        document.getElementById(section).style.display = 'block';
+        lastActiveSection = section; // Update last active section
+    }
+}
+
+// Optionally hide all sections initially
+window.onload = function() {
+    // Show the default section (Dashboard) when the page loads
+    document.getElementById('dashboard').style.display = 'block'; 
+    document.getElementById('stockIn').style.display = 'none';
+    document.getElementById('stockOut').style.display = 'none';
+    lastActiveSection = 'dashboard'; // Set default last active section
+
+    // Check if the correct PIN is saved in cookies
+    let savedPin = getCookie(pinCookieName);
+    if (savedPin === correctPin) {
+        // If the PIN is saved, don't prompt for the PIN again
+        document.getElementById('stockIn').style.display = 'none';
+        document.getElementById('stockOut').style.display = 'none';
+    }
+}
+
+
+
     </script>
 
 </body>
