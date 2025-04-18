@@ -99,6 +99,10 @@
             background-color: #2C3930;
             color: white;
         }
+tfoot {
+    text-align: center;
+    font-weight: bold;
+}
 
         td:first-child {
             width: 10%;
@@ -476,6 +480,13 @@
                     </tr>
                 </thead>
                 <tbody></tbody>
+                 <tfoot>
+        <tr>
+            <td colspan="2" style="text-align: right; font-weight: bold;">Total Stocks:</td>
+            <td id="total-stocks" style="font-weight: bold; color: orangered;"></td>
+            <td></td>
+        </tr>
+    </tfoot>
             </table>
         </div>
     </section>
@@ -640,15 +651,22 @@
     <script>
         // Fetch data from Google Sheets URL and populate the table
   function fetchData() {
+    const totalStocksCell = document.getElementById('total-stocks');
+    const tbody = document.querySelector('#sheet-data-table tbody');
+
+    // Hide the total stocks initially
+    totalStocksCell.style.visibility = 'hidden';
+
     fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTLwg0FY-mqPOBbM0UbBjPNq-wygnY_T9SUgrFXhiUWWpXPRdGzdUdmQP2KfN9XCkcgKOHDEWazeuoB/pub?gid=2123538677&single=true&output=csv')
         .then(response => response.text())
         .then(data => {
             const rows = data.split('\n').map(row => row.split(','));
-            const tbody = document.querySelector('#sheet-data-table tbody');
-            tbody.innerHTML = ''; // Clear the existing rows
+            let totalStocks = 0;
+
+            tbody.innerHTML = ''; // Clear existing rows
 
             rows.forEach((row, index) => {
-                if (index === 0 || row.length === 1 && row[0] === '') return;
+                if (index === 0 || (row.length === 1 && row[0] === '')) return;
 
                 const tr = document.createElement('tr');
                 const tdElements = [];
@@ -656,25 +674,38 @@
                 row.forEach((cell, colIndex) => {
                     const td = document.createElement('td');
                     td.textContent = cell.trim();
-                    tdElements.push(td); // Save td elements in an array for later use
+                    tdElements.push(td);
                     tr.appendChild(td);
                 });
 
-                // Check if Column 3 (index 2) is zero
-                if (parseFloat(row[2].trim()) === 0) {
-                    // Highlight Columns 1, 2, and 3 (indices 0, 1, 2)
+                // Add up stock values (Column index 2)
+                const stockValue = parseFloat(row[2]);
+                if (!isNaN(stockValue)) {
+                    totalStocks += stockValue;
+                }
+
+                // Highlight if stock is zero
+                if (stockValue === 0) {
                     for (let i = 0; i < 3; i++) {
-                        const cellToHighlight = tdElements[i]; // Get the td element for the current column
+                        const cellToHighlight = tdElements[i];
                         if (cellToHighlight) {
-                            cellToHighlight.style.backgroundColor = '#FF9A9A'; // Apply background color
+                            cellToHighlight.style.backgroundColor = '#FF9A9A';
                         }
                     }
                 }
 
                 tbody.appendChild(tr);
             });
+
+            // After data is loaded, update Total Stocks
+            totalStocksCell.textContent = totalStocks;
+
+            // Show Total Stocks row after data is loaded
+            totalStocksCell.style.visibility = 'visible';
         })
-        .catch(error => console.error('Error fetching data:', error));
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
 }
 
 
