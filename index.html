@@ -407,6 +407,43 @@
         }
     }
 
+
+ .tyre-animate-404x {
+  padding: 12px 20px;
+  font-size: 18px;
+  width: 360px;
+  border: 2px solid #F0F1C5;  /* default border */
+  border-radius: 6px;
+  background-color: transparent;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.4s ease, outline-color 0.4s ease;
+}
+
+.tyre-animate-404x:focus {
+  border-color: grey;          /* border changes on focus */
+  outline: 2px solid grey;     /* outline appears on focus */
+}
+
+
+    @keyframes pulseBorder {
+      0%   { border-color: #F0F1C5; }
+      50%  { border-color: #f6c90e; }
+      100% { border-color: #F0F1C5; }
+    }
+
+    .tyre-animate-404x::placeholder {
+      transition: color 0.3s ease;
+      color: #ccc;
+      opacity: 0.95;
+    }
+
+    /* Placeholder Color Variant*/
+    .color-0::placeholder { color: #000000; }
+    .color-1::placeholder { color: #2C2C2C; }
+    .color-2::placeholder { color: #18230F; }
+    .color-3::placeholder { color: #1D1616; }
+    .color-4::placeholder { color: #222222; }
     </style>
 </head>
 <body>
@@ -422,7 +459,7 @@
     <section id="dashboard" class="active">
         <div style="text-align: center; margin-top: 20px;">
             <h2>PAVITHRA TYRES<br/><span>TRUCK ALIGNMENT</span></h2>
-            <input type="text" id="search-input" placeholder="Tyre Pattern Name" oninput="filterTable()">
+            <input type="text" id="search-input" class="tyre-animate-404x" placeholder="" oninput="filterTable()">
             <!-- Sync Icon -->
             <div id="sync-icon" onclick="fetchData()">&#x21bb;</div>
         </div>
@@ -865,7 +902,54 @@ window.onload = function() {
     }
 }
 
+ const input = document.querySelector(".tyre-animate-404x");
 
+    const messages = [
+      "Tyre Pattern Name",
+      "IF You Want Specific Stock Details",
+      "Stock Shortage Check",
+      "Tyre Rate Details",
+      "CheckOut Live Stock Data....."
+    ];
+
+    const colors = ['color-0', 'color-1', 'color-2', 'color-3', 'color-4'];
+
+    let msgIndex = 0;
+    let charIndex = 0;
+    let typingForward = true;
+
+    function animatePlaceholder() {
+      const currentText = messages[msgIndex];
+
+      if (typingForward) {
+        charIndex++;
+        if (charIndex > currentText.length) {
+          typingForward = false;
+          setTimeout(animatePlaceholder, 1800);
+          return;
+        }
+      } else {
+        charIndex--;
+        if (charIndex === 0) {
+          typingForward = true;
+
+          // Cycle to next message + color
+          input.classList.remove(colors[msgIndex]);
+          msgIndex = (msgIndex + 1) % messages.length;
+          input.classList.add(colors[msgIndex]);
+
+          input.classList.add("animate-border");
+          setTimeout(() => input.classList.remove("animate-border"), 800);
+        }
+      }
+
+      input.setAttribute("placeholder", currentText.substring(0, charIndex));
+      setTimeout(animatePlaceholder, 90);
+    }
+
+    // Start with first color
+    input.classList.add(colors[0]);
+    animatePlaceholder();
 
     </script>
 
